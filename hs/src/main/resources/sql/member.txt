@@ -1,0 +1,100 @@
+--테이블 등록은 member_connect -> member 테이블 순으로
+--테이블 삭제는 member -> member_connect 테이블 순으로
+--member테이블의 c_code는 member_connect테이블의 c_code를 참조한다
+
+-- 계정 생성시 temp_code를 발급하여 user_connect테이블에 code, u1 필드를 입력한다.
+-- 계정 연결시 u2필드에 상대방 uid를 등록한다
+-- 연결된 두 uid의 code필드를 업데이트한다
+
+
+--------------------------------------------TABLE SETTING #1
+drop table member;
+create table member (
+  no                    number(11)			NOT NULL,
+  uuid					varchar(100)			NOT NULL ,
+  email					varchar(50)		    UNIQUE NOT NULL,
+  passwd				varcQhar(100)		NOT NULL,
+  name					varchar(20)			DEFAULT '',
+  gender                   char(1)             DEFAULT '',
+  birth                 varchar(20)         DEFAULT '',
+  begin_date            varchar(20)         DEFAULT '',
+  regdt					date	    		NOT NULL,
+  last_login			date		    	NOT NULL,
+  session_key           varchar(50)         DEFAULT 'none' NOT NULL,
+  session_limit         timestamp,
+  profile           varchar(255)        DEFAULT '',
+  temp_code             varchar(8)          DEFAULT '' not null,
+  c_code                varchar(8)          DEFAULT '',
+  primary key ( uuid ),
+  foreign key(c_code) references member_connect(c_code)
+);
+select * from member;
+delete from member;
+
+--------------------------------------------TABLE SETTING #2
+drop table member_connect;
+create table member_connect(
+  c_no                    number(11)			NOT NULL,
+  c_code                varchar(8)          NOT NULL,
+  u1                    varchar(100)			NOT NULL,
+  u2                    varchar(100)			DEFAULT '',
+  primary key(c_code)
+);
+select * from member_connect;
+delete from member_connect;
+
+
+--------------------------------------------------------------------------------------------
+
+--------------------------------------------회원가입
+
+--#1-1
+insert into member_connect (c_no, c_code, u1)
+values(
+   (SELECT NVL(MAX(c_no+1), 0) FROM member_connect),
+   '12345678',
+   'uuid'
+);
+--#1-2
+insert into member (no, uuid, email, passwd, regdt, last_login,  temp_code)
+values(
+    (SELECT NVL(MAX(no+1), 0) FROM member),
+    'uuid',
+    'ljhadf@naver.com',
+    'passwd',
+    sysdate,
+    sysdate,
+    '12345678'
+);
+
+--#2-1
+insert into member_connect (c_no, c_code, u1)
+values(
+   (SELECT NVL(MAX(c_no+1), 0) FROM member_connect),
+   '87654321',
+   'uuid2'
+);
+--#2-2
+insert into member (no, uuid, email, passwd, regdt, last_login,  temp_code)
+values(
+    (SELECT NVL(MAX(no+1), 0) FROM member),
+    'uuid2',
+    'ljhadf2@naver.com',
+    'passwd2',
+    sysdate,
+    sysdate,
+    '87654321'
+);
+
+--------------------------------------------계정연결
+--#계정 연결3-1
+update member_connect set u2='uuid2' where c_code='12345678';
+
+--#계정 연결3-2
+update member set c_code='12345678' where temp_code='12345678' or uuid='uuid2';
+
+
+
+select * from member;
+select uuid, email, profile, c_code from member;
+select * from member_connect;
