@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="MemberMapper">
+
+	<!-- update profile -->
+	<update id="updateProfile">
+	<![CDATA[
+		UPDATE member
+		SET gender = #{gender}
+			, name = #{name}
+			, birth = #{birth}
+			, begin_date = #{begin_date}
+			, last_login = sysdate
+		WHERE uuid = #{uuid}
+	]]>
+	</update>
+	
+	<!-- update photo -->
+	<update id="updatePhoto">
+	<![CDATA[
+		UPDATE member
+		SET profile = #{photo}
+		WHERE uuid = #{uuid}
+	]]>
+	</update>
+
+	<!-- member recoard return by uuid -->
+	<select id="getMemberByEmail" resultType="com.spring.hs.dto.MemberDTO">
+	<![CDATA[
+		SELECT *
+		FROM member
+		WHERE email = #{email}
+	]]>
+	</select>
+
+	<!-- member recoard return by uuid -->
+	<select id="getMemberByUuid" resultType="com.spring.hs.dto.MemberDTO">
+	<![CDATA[
+		SELECT *
+		FROM member
+		WHERE uuid = #{uuid}
+	]]>
+	</select>
+
+	<!-- c_code select -->
+	<select id="validCode" resultType="_int">
+	<![CDATA[
+		SELECT count(*)
+		FROM member_connect
+		WHERE u2 = #{uuid}
+	]]>
+	</select>
+	
+	<!-- member c_code update -->
+	<update id="updateMemberCode">
+	<![CDATA[
+		UPDATE member
+		SET c_code = '${code}'
+		WHERE temp_code = #{code}
+			or uuid = #{uuid}
+	]]>
+	</update>
+
+	<!-- member_connect u2 update -->
+	<update id="updateMemberConnectCode">
+	<![CDATA[
+		UPDATE member_connect
+		SET u2 = '${uuid}'
+		WHERE c_code = #{code}
+	]]>
+	</update>
+
+	<!-- c_code select -->
+	<select id="getCode" resultType="com.spring.hs.dto.MemberConnectDTO">
+	<![CDATA[
+		SELECT *
+		FROM member_connect
+		WHERE c_code = #{code}
+	]]>
+	</select>
+
+	<!-- member 테이블 CREATE -->
+	<insert id="createMember">
+	<![CDATA[
+		INSERT INTO member (no, uuid, email, passwd, regdt, last_login, temp_code)
+		VALUES(
+		    (SELECT NVL(MAX(no+1), 0) FROM member)
+		    , #{uuid}
+		    , #{email}
+		    , #{passwd}
+		    , sysdate
+		    , sysdate
+		    , #{code}
+		)
+	]]>
+	</insert>
+	
+	<!-- member_connect 테이블 CREATE -->
+	<insert id="createMemberConnect">
+	<![CDATA[
+		INSERT INTO member_connect (c_no, c_code, u1)
+		VALUES(
+		   (SELECT NVL(MAX(c_no+1), 0) FROM member_connect)
+		   , #{code}
+		   , #{uuid}
+		)
+	]]>
+	</insert>
+	
+	<!-- 이메일 중복 확인 -->
+	<select id="duplicateEmail" resultType="_int">
+	<![CDATA[
+		SELECT count(*)
+		FROM member
+		WHERE email = #{email}
+	]]>
+	</select>
+	
+	<!-- 코드발급시 중복코드방지를 위해 c_code를 모두 가져온다 -->
+	<select id="getAllcode" resultType="string">
+	<![CDATA[
+		SELECT c_code
+		FROM member_connect
+	]]>
+	</select>
+	
+</mapper>

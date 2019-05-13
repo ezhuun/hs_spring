@@ -1,0 +1,297 @@
+@charset "utf-8";
+
+@-webkit-keyframes fadeIn-upDown {
+	from {
+		opacity: 0;
+		margin-top: -5rem;
+	}
+	to {
+		opacity: 1;
+		margin-top: 0;
+	}
+}
+
+@-webkit-keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes shake {
+	from{
+		transform: rotate(0.5deg);
+	}
+	to{
+		transform: rotate(-0.5deg);
+	}
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	animation: fadeIn .3s linear;
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+.link {
+	color: #7289DA;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.textSmall {
+	font-size: .9rem;
+}
+
+.disabled {
+	opacity: .4;
+	cursor: default !important;
+}
+
+.block {
+	display: block !important;
+}
+
+.center {
+	text-align: center !important;
+}
+
+.nomargin {
+	margin: 0 !important;
+}
+
+.nomarginleft {
+	margin-left: 0 !important;
+}
+
+.nomargintop {
+	margin-top: 0 !important;
+}
+
+.nomarginbottom {
+	margin-top: 0 !important;
+}
+
+.nomarginright {
+	margin-top: 0 !important;
+}
+
+.hidden {
+	display: none !important;
+}
+
+.warning {
+	color: red !important;
+	animation: shake .2s linear;
+	animation-iteration-count: 2;
+}
+
+.warning input{
+	border-color: red !important;
+}
+
+.modal-layout {
+	display: block;
+}
+
+.modal-alert {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	background: rgba(0, 0, 0, .3);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 100;
+}
+
+.modal-alert-container {
+	line-height: 1.5;
+	background: white;
+	width: 25rem;
+	padding: 1.5rem;
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .09);
+	border-radius: 4px;
+	animation-name: fadeIn-upDown;
+	animation-duration: .5s;
+	-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	outline: none;
+}
+
+.modal-alert-container .modal-inner-text {
+	word-wrap: break-word;
+}
+
+.modal-alert-container .modal-inner-button {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+
+.modal-alert-container .modal-added-button {
+	margin-right: 0.5rem;
+}
+
+.modal-alert-container .modal-inner-button button {
+	all: unset;
+	border-radius: .4rem;
+	color: #FFFFFF;
+	background: #13AE8D;
+	padding: .5rem 1rem;
+	cursor: pointer;
+}
+
+.modal-form-layout {
+	display: block;
+}
+
+.modal-form {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	background-color: rgba(0, 0, 0, .2);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 2;
+}
+
+.modal-form-container {
+	color: #2c2c2c;
+	position: relative;
+	padding: 1.25rem;
+	width: 25rem;
+	box-shadow: 0 2px 14px rgba(0, 0, 0, .15), 0 0 0 0.5px rgba(0, 0, 0, .2);
+	background-color: #fff;
+	box-sizing: border-box;
+	border-radius: 3px;
+	outline: none;
+	line-height: 1.275rem;
+	animation-name: fadeIn-upDown;
+	animation-duration: .5s;
+	-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.modal-form-title {
+	padding-bottom: 1.125rem;
+	font-weight: bold;
+}
+
+.modal-form-inner {
+	box-sizing: border-box;
+	font-size: 0.875rem;
+}
+
+.modal-form-inner input {
+	border-radius: 3px;
+	outline: none;
+	border: 1px solid #d4d4d4;
+	outline: none;
+	box-sizing: border-box;
+	display: block;
+	padding: 0 0.375rem;
+	margin: .125rem 0 .875rem;
+	width: 100%;
+	height: 1.875rem;
+}
+
+.modal-form-button {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-end;
+	margin-top: 1rem;
+}
+
+.modal-form-button button {
+	color: #fff;
+	background-color: #18a0fb;
+	border-radius: 2px;
+	border: none;
+	padding: 0.5rem 1rem;
+	height: 2.125rem;
+	cursor: pointer;
+}
+
+.radio {
+	display: inline-block;
+	position: relative;
+	padding-left: 1.8rem;
+	margin-bottom: 0.75rem;
+	cursor: pointer;
+	font-size: 1rem;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.radio+.radio {
+	margin-left: 0.75rem;
+}
+
+.radio input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+
+/* Create a custom radio button */
+
+.checkmark {
+	position: absolute;
+	top: 0.1rem;
+	left: 0;
+	height: 1.25rem;
+	width: 1.25rem;
+	background-color: #eee;
+	border-radius: 50%;
+}
+
+.radio:hover input~.checkmark {
+	background-color: #ccc;
+}
+
+.radio input:checked~.checkmark {
+	background-color: #2196F3;
+}
+
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+
+.radio input:checked~.checkmark:after {
+	display: block;
+}
+
+.radio .checkmark:after {
+	top: 0.37rem;
+	left: 0.37rem;
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background: white;
+}

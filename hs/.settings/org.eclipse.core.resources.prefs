@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//src/main/webapp/WEB-INF/views/auth/login.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/auth/register.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/auth/register_connect.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/auth/register_profile.jsp=UTF-8

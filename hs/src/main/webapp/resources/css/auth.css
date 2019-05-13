@@ -1,0 +1,270 @@
+@charset "utf-8";
+
+@-webkit-keyframes upDown {
+	from {
+		top: 0;
+	}
+	to {
+		top: 0.275rem;
+	}
+}
+
+.wrap-auth::after {
+	content: '';
+	top: 0;
+	left: 0;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-image: url('../images/loginbg.png');
+	background-size: contain;
+	background-repeat: repeat-x;
+	background-position: center top;
+	z-index: -1;
+	background-color: #e9a6b3;
+}
+
+.wrap-auth {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.box-area {
+	margin-left: 5rem;
+	margin-top: -5rem;
+}
+
+.logo {
+	width: 28rem;
+	text-align: center;
+	margin-bottom: 1rem;
+	-ms-user-select: none;
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+}
+
+.logo img {
+	width: 6rem;
+}
+
+.auth-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	width: 28rem;
+	background: #FFFFFF;
+	box-shadow: 0px 2px 10px rgba(0, 0, 0, .4);
+	border-radius: 5px;
+	animation-name: fadeIn-upDown;
+	animation-duration: .5s;
+	padding: 1.5rem;
+	color: #666;
+	box-sizing: border-box;
+	transition: all .3s;
+}
+
+.auth-title {
+	text-align: center;
+	font-size: 1.3rem;
+	font-weight: 600;
+	margin: 1rem 0;
+}
+
+.auth-inner-input {
+	margin-bottom: 1.5rem;
+}
+
+.auth-inner-input input[type="text"],
+.auth-inner-input input[type="email"],
+.auth-inner-input input[type="number"],
+.auth-inner-input input[type="password"] {
+	margin: .5rem 0;
+	display: block;
+	background: rgba(254, 254, 254, 0.1);
+	border: 1px solid #e0e0e0;
+	box-sizing: border-box;
+	border-radius: 3px;
+	color: #333;
+	font-size: 1rem;
+	width: 100%;
+	height: 2.5rem;
+	padding: .6rem .8rem;
+	outline: none;
+}
+
+.input_inline {
+	display: inline-block !important;
+	width: 79% !important;
+}
+
+.auth-inner-input input[type="text"] + button,
+.auth-inner-input input[type="email"] + button,
+.auth-inner-input input[type="number"] + button,
+.auth-inner-input input[type="password"] + button{
+	background: #7289DA;
+	border: none;
+	color: #fff;
+	font-weight: bold;
+	border-radius: 8px;
+	height: 2.5rem;
+	width: 19%;
+	cursor: pointer;
+	outline: none;
+}
+
+.auth-button {
+	margin: 1rem 0;
+}
+
+.auth-button button {
+	width: 100%;
+	height: 3rem;
+	background: #7289DA;
+	border-radius: 3px;
+	border: none;
+	color: #FFFFFF;
+	font-size: 0.9rem;
+	font-weight: bold;
+	cursor: pointer;
+	outline: none;
+}
+
+.register-step {
+	margin-bottom: .5rem;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.register-step .step {
+	position: relative;
+	border: 2px solid;
+	border-radius: 100%;
+	width: 1.5rem;
+	height: 1.5rem;
+	font-size: 1rem;
+	color: #777;
+	border-color: #777;
+}
+
+.register-step .step:not(:first-child) {
+	margin-left: 2rem;
+}
+
+.register-step .step:not(:first-child)::after {
+	content: '. . .';
+	position: absolute;
+	top: -.25rem;
+	left: -1.8rem;
+	color: #777;
+	font-weight: bold;
+	font-size: 1;
+}
+
+.register-step .step.active:not(:first-child)::after {
+	color: #7289da;
+}
+
+.register-step .step.active {
+	color: #7289da;
+	border-color: #7289da;
+}
+
+.user_profile_circle {
+	position: relative;
+	color: #fff;
+	width: 5rem;
+	height: 5rem;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+	margin-bottom: .5rem;
+	overflow: hidden;
+	background-color: #18A0FB;
+}
+
+.user_profile_circle span {
+	font-size: 2rem;
+	font-weight: bold;
+}
+
+.user_profile_circle input {
+	display: none;
+}
+
+.user_profile_circle label::after {
+	content: '\270E';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 5rem;
+	height: 5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 100%;
+	font-size: 1rem;
+	color: #fff;
+	background-color: rgba(0, 0, 0, .2);
+	opacity: 0;
+}
+
+.user_profile_circle label:hover::after {
+	opacity: 1;
+}
+
+.user_profile_circle img {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.loadingDot {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: row;
+	opacity: 1;
+	transition: opacity .5s;
+}
+
+.loadingDot div {
+	position: relative;
+	padding: 0;
+	margin: 0;
+	width: 0.5rem;
+	height: 0.5rem;
+	border-radius: 50%;
+	background-color: #FFFFFF;
+	animation-name: upDown;
+	animation-duration: 0.5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+.loadingDot div+div {
+	margin-left: 0.25rem;
+}
+
+@media (max-width: 768px) {
+	.box-area {
+		width: 100%;
+		margin: 0 1rem;
+	}
+	.auth-box {
+		width: 100%;
+		margin-right: 1rem;
+	}
+	.logo {
+		width: 100%;
+	}
+}

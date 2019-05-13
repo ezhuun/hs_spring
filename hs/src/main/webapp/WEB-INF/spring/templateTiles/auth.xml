@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE  tiles-definitions PUBLIC 
+    "-//Aapche Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="main" template="/WEB-INF/views/template/template_auth.jsp">
+<!-- 		<put-attribute name="header" value="/WEB-INF/views/template/top.jsp" /> -->
+	</definition>
+	
+	<definition name="/auth/login" extends="main">
+		<put-attribute name="title" value="하트시그널"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/auth/login.jsp" />
+	</definition>
+
+	<definition name="/auth/register" extends="main">
+		<put-attribute name="title" value="하트시그널"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/auth/register.jsp" />
+	</definition>
+	
+	<definition name="/auth/register_connect" extends="main">
+		<put-attribute name="title" value="하트시그널"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/auth/register_connect.jsp" />
+	</definition>
+	
+	<definition name="/auth/register_profile" extends="main">
+		<put-attribute name="title" value="하트시그널"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/views/auth/register_profile.jsp" />
+	</definition>
+	
+</tiles-definitions>
