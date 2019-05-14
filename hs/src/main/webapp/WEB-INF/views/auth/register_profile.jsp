@@ -3,7 +3,7 @@
 
 <div class="wrap-auth">
 	<div class="box-area nomargintop">
-		<div class="logo"><img src="${root}/images/logo.png" onerror="this.display:none;"></div>
+		<div class="logo"><img src="${root}/images/logo.png" onerror="this.display=none;"></div>
 		<div class="auth-box">
 			<div class="auth-title">
 				<div class="register-step">
@@ -18,7 +18,7 @@
 			<div class="auth-form">
 				<div class="auth-inner-input center nomargin">
 	        		<div class="user_profile_circle">
-	        				<img id="profileImage" src="${root}/upload/profile/${profile}" width="80" onError="this.src='${root}/upload/profile/default.png'">
+	        				<img id="profileImage" src="<c:if test='${not empty profile}'>${root}/upload/profile/${profile}</c:if>" width="80" onError="this.src='${root}/upload/profile/default.png'">
 	        			<label for="upload">
 	        				<input type="file" accept="image/*" id="upload" name="upload" onchange="handleChangePhoto(event);">
 	        			</label>
@@ -123,8 +123,7 @@
 	        },
 	        success: function(data) {
 	        	if(data != "0"){
-	        		utils.alert('로그인 성공... session객체 작업해야함');
-	        		//location.href = contextPath + "/main";
+	        		location.href = contextPath + "/main";
 	        	}else{
 	        		utils.alert('로그인에 실패했습니다');
 	        	}

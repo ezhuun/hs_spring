@@ -5,6 +5,72 @@
 
 <mapper namespace="MemberMapper">
 
+
+	<select id="getCcodebyUuid" resultType="string">
+	<![CDATA[
+		SELECT NVL(c_code, '')
+		FROM member
+		WHERE
+			uuid = #{uuid}
+	]]>
+	</select>
+	
+	<select id="checkMemberWithSessionKey" resultType="com.spring.hs.dto.MemberDTO">
+	<![CDATA[
+		SELECT
+			*
+		FROM
+			member
+		WHERE
+			session_key = #{session_key} AND
+			session_limit > sysdate
+	]]>
+	</select>
+
+	<!-- 로그인 시 session정보를 저장한다 -->
+	<update id="keepLogin">
+	<![CDATA[
+		UPDATE
+			member
+		SET
+			session_key = #{session_key}
+			, session_limit = #{session_limit}
+		WHERE
+			uuid = #{uuid}
+	]]>
+	</update>
+	
+	
+	<!-- 연결된 계정 정보를 가져온다 -->
+	<select id="getConnectedAccount" resultType="com.spring.hs.dto.MemberDTO">
+	<![CDATA[
+		SELECT
+			uuid
+			, email
+			, name
+			, birth
+			, begin_date
+			, last_login
+			, profile
+			, temp_code
+			, c_code
+			, gender
+		FROM member
+		WHERE
+			c_code = (SELECT c_code FROM MEMBER WHERE uuid = #{uuid})
+			AND uuid != #{uuid}
+	]]>
+	</select>
+
+	<!-- update last_login -->
+	<update id="lastLoginUpdate">
+	<![CDATA[
+		UPDATE member
+		SET last_login = sysdate
+		WHERE uuid = #{uuid}
+	]]>
+	</update>
+
 	<!-- update profile -->
 	<update id="updateProfile">
 	<![CDATA[

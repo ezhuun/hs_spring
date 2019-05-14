@@ -1,6 +1,7 @@
 package com.spring.hs.dao;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +12,11 @@ import com.spring.hs.dto.MemberDTO;
 
 public interface MemberDAO {
 	
-	
-	
+	public String getCcodebyUuid(String uuid);
+	public MemberDTO checkMemberWithSessionKey(String session_key);
+	public boolean keepLogin(String uuid, String session_key, Date session_limit);
+	public MemberDTO getConnectedAccount(String uuid);
+	public void lastLoginUpdate(String uuid);
 	public boolean updateProfile(MemberDTO dto);
 	public boolean updatePhoto(String uuid, String photo);
 	public MemberDTO getMemberByUuid(String uuid);
@@ -25,13 +29,6 @@ public interface MemberDAO {
 	public boolean createMemberConnect(Map<String, String> map);
 	public boolean duplicateEmail(String email);
 	public List<String> getAllcode();
-	
-	
-	
-	
-	
-	
-	
 	
 	
 }

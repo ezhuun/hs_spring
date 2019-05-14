@@ -1,5 +1,6 @@
 package com.spring.hs.dao;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +17,48 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Autowired
 	SqlSession sqlSession;
+	
 	private static final String NAMESPACE = "MemberMapper";
+
 	
+	@Override
+	public String getCcodebyUuid(String uuid) {
+		return sqlSession.selectOne(NAMESPACE+".getCcodebyUuid", uuid);
+	}
+
+	@Override
+	public MemberDTO checkMemberWithSessionKey(String session_key) {
+		return sqlSession.selectOne(NAMESPACE+".checkMemberWithSessionKey", session_key);
+	}
 	
+	@Override
+	public boolean keepLogin(String uuid, String session_key, Date session_limit) {
+		boolean flag = false;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("uuid", uuid);
+		map.put("session_key", session_key);
+		map.put("session_limit", session_limit);
+		
+		int cnt = sqlSession.update(NAMESPACE+".keepLogin", map);
+		
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
 	
-	
-	
-	
-	
-	
+	@Override
+	public MemberDTO getConnectedAccount(String uuid) {
+		return sqlSession.selectOne(NAMESPACE+".getConnectedAccount", uuid);
+	}
+
+	@Override
+	public void lastLoginUpdate(String uuid) {
+		sqlSession.update(NAMESPACE+".lastLoginUpdate", uuid);
+	}
+
 	@Override
 	public boolean updateProfile(MemberDTO dto) {
 		boolean flag = false;
@@ -37,8 +71,6 @@ public class MemberDAOImpl implements MemberDAO {
 		return flag;
 	}
 
-
-
 	@Override
 	public boolean updatePhoto(String uuid, String photo) {
 		boolean flag = false;
@@ -47,15 +79,13 @@ public class MemberDAOImpl implements MemberDAO {
 		map.put("uuid", uuid);
 		map.put("photo", photo);
 		
-		int cnt = sqlSession.update(NAMESPACE+".updateProfile", map);
+		int cnt = sqlSession.update(NAMESPACE+".updatePhoto", map);
 		
 		if(cnt > 0) {
 			flag = true;
 		}
 		return flag;
 	}
-	
-	
 	
 	@Override
 	public MemberDTO getMemberByEmail(String email) {
@@ -150,10 +180,5 @@ public class MemberDAOImpl implements MemberDAO {
 	public List<String> getAllcode() {
 		return sqlSession.selectList(NAMESPACE+".getAllcode");
 	}
-
-
-	
-	
-	
 	
 }

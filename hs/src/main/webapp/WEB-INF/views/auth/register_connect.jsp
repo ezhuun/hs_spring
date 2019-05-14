@@ -3,7 +3,7 @@
 
 <div class="wrap-auth">
 	<div class="box-area">
-		<div class="logo"><img src="${root}/images/logo.png" onerror="this.display:none;"></div>
+		<div class="logo"><img src="${root}/images/logo.png" onerror="this.display=none;"></div>
 		<div class="auth-box">
 			<div class="auth-title">
 				<div class="register-step">
@@ -42,6 +42,36 @@
 <script src="${root}/js/utils.js" charset="utf-8"></script>
 <script src="${root}/js/auth.js" charset="utf-8"></script>
 <script>
+	//setinteval을 이용하여 주기적으로 db점검필요.. 상대방이 연결했다면 다음페이지로 이동시키기 위함..
+	//일단 5초에 한번씩 검사하는걸로..
+	const uuid = document.querySelector("#uuid").value.trim();
+	setInterval(function(){
+	    $.ajax({
+	        url: contextPath + "/getCode",
+	        method: "post",
+	        type: "json",
+	        data: {uuid: uuid},
+	        success: function(data) {
+	        	if(data.trim().length > 0){
+	        		let form = document.createElement("form");
+	        		form.setAttribute("style", "display:none");
+	                form.setAttribute("charset", "UTF-8");
+	                form.setAttribute("method", "post");
+	                form.setAttribute("action", contextPath+"/profile");
+	                
+	                let hiddenField = document.createElement("input");
+	                hiddenField.setAttribute("type", "hidden");
+	                hiddenField.setAttribute("name", "uuid");
+	                hiddenField.setAttribute("value", uuid);
+	                form.appendChild(hiddenField);
+	                
+	                document.body.appendChild(form);
+	                form.submit();
+	        	}
+	        }
+	    });
+	}, 5000);
+
 	const handleClickConnect = function(){
 		initHelp();
 		const uuid = document.querySelector("#uuid").value.trim();

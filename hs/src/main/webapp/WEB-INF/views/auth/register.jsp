@@ -3,7 +3,7 @@
 
 <div class="wrap-auth">
 	<div class="box-area">
-		<div class="logo"><img src="${root}/images/logo.png" onerror="this.display:none;"></div>
+		<div class="logo"><img src="${root}/images/logo.png" onerror="this.display=none;"></div>
 		<div class="auth-box">
 			<div class="auth-title">
 				<div class="register-step">

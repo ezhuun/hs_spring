@@ -8,5 +8,7 @@
 </head>
 <body>
 	${member}
+	
+	<button onclick="location.href='${pageContext.request.contextPath}/logout';">logout</button>
 </body>
 </html>

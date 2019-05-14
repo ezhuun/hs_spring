@@ -1,6 +1,7 @@
 package com.spring.hs.service;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,35 @@ public class MemberServiceImpl implements MemberService{
 	
 	
 	
+	@Override
+	public String getCcodebyUuid(String uuid) {
+		return dao.getCcodebyUuid(uuid);
+	}
+
+	@Override
+	public MemberDTO checkMemberWithSessionKey(String session_key) {
+		return dao.checkMemberWithSessionKey(session_key);
+	}
+	
+	@Override
+	public boolean keepLogin(String uuid, String session_key, Date session_limit) {
+		return dao.keepLogin(uuid, session_key, session_limit);
+	}
+
+	@Override
+	public MemberDTO getConnectedAccount(String uuid) {
+		return dao.getConnectedAccount(uuid);
+	}
+
+	@Override
+	public void lastLoginUpdate(String uuid) {
+		dao.lastLoginUpdate(uuid);
+	}
+
+	@Override
+	public boolean passwdCheck(String passwd, String passwdCheck) {
+		return passwordEncoder.matches(passwd, passwdCheck);
+	}
 	
 	@Override
 	public boolean updateProfile(MemberDTO dto) {
@@ -146,11 +176,9 @@ public class MemberServiceImpl implements MemberService{
 		}
 	}
 
-
 	@Override
 	public boolean duplicateEmail(String email) {
 		return dao.duplicateEmail(email);
 	}
-	
 	
 }

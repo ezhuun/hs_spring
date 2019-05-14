@@ -19,9 +19,9 @@ public class MemberDTO {
 	private String temp_code;
 	private String c_code;
 	private String gender;
+	private MemberDTO lover;
 	
-	
-	
+
 	
 	@Override
 	public String toString() {
@@ -29,9 +29,16 @@ public class MemberDTO {
 				+ ", birth=" + birth + ", begin_date=" + begin_date + ", regdt=" + regdt + ", last_login=" + last_login
 				+ ", auth_key=" + auth_key + ", auth_status=" + auth_status + ", session_key=" + session_key
 				+ ", session_limit=" + session_limit + ", profile=" + profile + ", temp_code=" + temp_code + ", c_code="
-				+ c_code + ", gender=" + gender + "]";
+				+ c_code + ", gender=" + gender + ", lover=" + lover + "]";
 	}
 	
+
+	public MemberDTO getLover() {
+		return lover;
+	}
+	public void setLover(MemberDTO lover) {
+		this.lover = lover;
+	}
 	public String getGender() {
 		return gender;
 	}
