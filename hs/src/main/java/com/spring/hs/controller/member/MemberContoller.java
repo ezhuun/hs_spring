@@ -1,4 +1,4 @@
-package com.spring.hs.controller;
+package com.spring.hs.controller.member;
 
 import java.io.File;
 import java.util.Date;
@@ -27,9 +27,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 import com.spring.hs.Utility;
-import com.spring.hs.dto.MemberConnectDTO;
-import com.spring.hs.dto.MemberDTO;
-import com.spring.hs.service.MemberService;
+import com.spring.hs.dto.member.MemberConnectDTO;
+import com.spring.hs.dto.member.MemberDTO;
+import com.spring.hs.service.member.MemberService;
 
 @Controller
 public class MemberContoller {
@@ -42,6 +42,46 @@ public class MemberContoller {
 	//세션기간 설정
 	private int amount = (60 * 60 * 24) * 3;
 	//private int amount = 10;
+	
+	
+	
+	@ResponseBody
+	@PostMapping("/reRegisterPasswd")
+	public String reRegisterPasswd(String uuid, String passwd) {
+		String result = "0";
+		
+		boolean flag = service.changePasswd(uuid, passwd);
+		if(flag) {
+			result = "1";
+		}
+		System.out.println(uuid+passwd);
+		System.out.println("result:" +result);
+		return result;
+	}
+	
+	@GetMapping("/reRegisterPasswd")
+	public String reRegisterPasswd(String uuid, Model model) {
+		model.addAttribute("uuid", uuid);
+		return "/auth/reRegisterPasswd";
+	}
+	
+	@ResponseBody
+	@PostMapping("/forgetPasswdSendMail")
+	public String forgetPasswdSendMail(String email) {
+		String result = "0";
+		
+		MemberDTO dto = service.getMemberByEmail(email);
+		if(dto != null) {
+			String title = "[하트시그널] 비밀번호 변경 안내메일입니다";
+			String message = "당신의 하트시그널 비밀번호는 아래 버튼을 통해 재설정이 가능합니다.<br/>"
+					+ "만약, 직접 메일을 요청하지 않았거나 비밀번호 재설정을 원치 않으실 경우 해당 메일은 무시해주세요:)<br/>";
+			String btnStr = "비밀번호 재설정";
+			service.sendMail(email, title, message, "/reRegisterPasswd?uuid="+dto.getUuid(), btnStr);
+			result = "1";
+		}
+		
+		return result;
+	}
 	
 	@ResponseBody
 	@PostMapping("/getCode")
@@ -255,8 +295,13 @@ public class MemberContoller {
 	
 	@ResponseBody
 	@PostMapping("/sendEmail")
-	public String sendEmail(String email, String title, String message) {
-		int res = service.sendMail(email, title, message, "/register");
+	public String sendEmail(String email, String code) {
+		String title = "[하트시그널] 상대방에게서 초대코드가 도착했습니다";
+		String message = "하트시그널로 당신을 초대합니다.<br/>당신의 친구에게서 하트시그널 초대장이 도착했습니다."
+				+ "상대방과의 계정연결을 원하실 경우 아래 초대코드를 홈페이지 가입 후 입력해주세요"
+				+ "<h3>" + code + "</h3>";
+		String btnStr = "홈페이지 바로가기";
+		int res = service.sendMail(email, title, message, "/register", btnStr);
 		if(res == 1) {
 			return "1";
 		}else {

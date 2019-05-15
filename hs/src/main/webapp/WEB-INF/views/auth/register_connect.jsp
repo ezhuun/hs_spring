@@ -145,10 +145,7 @@
 			return;
 		}
 		
-		const title = "[HEART SIGNAL] 상대방에게서 초대코드가 도착했습니다";
-		const message = "상대방과 연결을 위해<br/>하트시그널 가입 후<br/>아래 초대코드를 입력해주세요<h3>"+mycode+"</h3>";
-		
-		const param = {email: email, title: title, message: message};
+		const param = {email: email, code: mycode};
 		const url = contextPath + "/sendEmail";
 		
 		const modal = document.querySelector(".modal-form-container");
@@ -187,7 +184,7 @@
 	const handleClickOpenSendBox = function(){
 		const mycode = document.querySelector("#mycode").value;
 		utils.popupForm("초대코드 공유",
-				"<span>아래 이메일주소로 초대코드를 전송합니다</span> <input type='email' id='sendEmail'/> ",
+				"<span>상대방 이메일 주소를 입력해주세요. 초대코드를 전송합니다. </span> <input type='email' id='sendEmail'/> ",
 				"<button onclick='sendEmail(\""+mycode+"\");'><div class='loadingDot hidden'><div></div><div></div><div></div></div><span class='btnStr'>전송</span></button>"
 				);
 	};

@@ -18,7 +18,7 @@
 			<div class="auth-form">
 				<div class="auth-inner-input center nomargin">
 	        		<div class="user_profile_circle">
-	        				<img id="profileImage" src="<c:if test='${not empty profile}'>${root}/upload/profile/${profile}</c:if>" width="80" onError="this.src='${root}/upload/profile/default.png'">
+	        				<img id="profileImage" src="<c:if test='${not empty profile}'>${root}/upload/profile/${profile}</c:if>" onError="this.src='${root}/upload/profile/default.png'">
 	        			<label for="upload">
 	        				<input type="file" accept="image/*" id="upload" name="upload" onchange="handleChangePhoto(event);">
 	        			</label>

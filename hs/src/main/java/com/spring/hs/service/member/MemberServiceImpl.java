@@ -1,4 +1,4 @@
-package com.spring.hs.service;
+package com.spring.hs.service.member;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.hs.MailHandler;
 import com.spring.hs.Utility;
-import com.spring.hs.dao.MemberDAO;
-import com.spring.hs.dto.MemberConnectDTO;
-import com.spring.hs.dto.MemberDTO;
+import com.spring.hs.dao.member.MemberDAO;
+import com.spring.hs.dto.member.MemberConnectDTO;
+import com.spring.hs.dto.member.MemberDTO;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -30,8 +30,15 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	
-	
+	@Override
+	public boolean changePasswd(String uuid, String passwd) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("uuid", uuid);
+		map.put("passwd", passwordEncoder.encode(passwd));
+		
+		return dao.changePasswd(map);
+	}
+
 	@Override
 	public String getCcodebyUuid(String uuid) {
 		return dao.getCcodebyUuid(uuid);
@@ -108,7 +115,8 @@ public class MemberServiceImpl implements MemberService{
 	}
 	
 	@Override
-	public int sendMail(String email, String title, String message, String location) {
+	public int sendMail(String email,
+			String title, String message, String location, String btnStr) {
 		int result = 0;
 		MailHandler sendMail;
 		try {
@@ -120,16 +128,16 @@ public class MemberServiceImpl implements MemberService{
 			string.append("<div style='text-align:center; background-color: #efefef; border-radius:4px'>");
 			string.append("<div style='font-weight:bold; font-size:1.8rem; color:#999;'>HEART SIGNAL</div>");
 			string.append("<div style='position:relative; box-shadow: 0px 1px 5px rgba(0,0,0,0.1); background-color:#fff; top:5px; padding:5%;'>");
-			string.append("<h2>안녕하세요</h2><br/>");
+			string.append("<h2>안녕하세요 하트시그널입니다.</h2><br/>");
 			string.append(message);
 			string.append("<br/><br/><a style='text-decoration:none; background-color: #18A0FB; box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); border-radius: 8px; border:none; color:#fff; font-weight:bold; padding:1rem; cursor:pointer;' href='");
 			string.append("http://localhost:8080/hs");
 			string.append(location);
-			string.append("'>Click</a><br/><br/>");
+			string.append("'>"+ btnStr +"</a><br/><br/>");
 			string.append("</div></div></div>");
 			
 			sendMail.setText(string.toString());
-			sendMail.setFrom("heartsignal55", "HEARTSIGNAL");
+			sendMail.setFrom("heartsignal55", "하트시그널");
 			sendMail.setTo(email);
 			sendMail.send();
 			

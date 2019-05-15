@@ -6,6 +6,18 @@
 <mapper namespace="MemberMapper">
 
 
+	<!-- 비밀번호 변경 by uuid -->
+	<update id="changePasswd">
+	<![CDATA[
+		UPDATE
+			member
+		SET
+			passwd = #{passwd}
+		WHERE
+			uuid = #{uuid}
+	]]>
+	</update>
+	
 	<select id="getCcodebyUuid" resultType="string">
 	<![CDATA[
 		SELECT NVL(c_code, '')
@@ -15,7 +27,7 @@
 	]]>
 	</select>
 	
-	<select id="checkMemberWithSessionKey" resultType="com.spring.hs.dto.MemberDTO">
+	<select id="checkMemberWithSessionKey" resultType="com.spring.hs.dto.member.MemberDTO">
 	<![CDATA[
 		SELECT
 			*
@@ -42,7 +54,7 @@
 	
 	
 	<!-- 연결된 계정 정보를 가져온다 -->
-	<select id="getConnectedAccount" resultType="com.spring.hs.dto.MemberDTO">
+	<select id="getConnectedAccount" resultType="com.spring.hs.dto.member.MemberDTO">
 	<![CDATA[
 		SELECT
 			uuid
@@ -94,7 +106,7 @@
 	</update>
 
 	<!-- member recoard return by uuid -->
-	<select id="getMemberByEmail" resultType="com.spring.hs.dto.MemberDTO">
+	<select id="getMemberByEmail" resultType="com.spring.hs.dto.member.MemberDTO">
 	<![CDATA[
 		SELECT *
 		FROM member
@@ -103,7 +115,7 @@
 	</select>
 
 	<!-- member recoard return by uuid -->
-	<select id="getMemberByUuid" resultType="com.spring.hs.dto.MemberDTO">
+	<select id="getMemberByUuid" resultType="com.spring.hs.dto.member.MemberDTO">
 	<![CDATA[
 		SELECT *
 		FROM member
@@ -140,7 +152,7 @@
 	</update>
 
 	<!-- c_code select -->
-	<select id="getCode" resultType="com.spring.hs.dto.MemberConnectDTO">
+	<select id="getCode" resultType="com.spring.hs.dto.member.MemberConnectDTO">
 	<![CDATA[
 		SELECT *
 		FROM member_connect

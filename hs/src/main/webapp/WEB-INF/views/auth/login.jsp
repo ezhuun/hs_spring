@@ -47,7 +47,7 @@
 		initHelp();
 		const email = document.querySelector("#email").value;
 		if(email == ""){
-			createHelp(0, " - 입력바랍니다");
+			createHelp(0, "- 이메일을 입력하세요");
 			return;
 		}
 	    let regex = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
@@ -56,7 +56,37 @@
 	        createHelp(0, " - 형식이 올바르지 않습니다");
 	        return;
 	    }
-	    utils.alert('<준비중><br>1. 이메일 유효성 체크 <br>2.비밀번호 변경 URL 메일보내기<br>3.비밀번호변경페이지작성');
+	    
+	    const param = {"email": email};
+	    const loadingDot = document.querySelector(".loadingDot");
+	    const submitStr = document.querySelector(".submitStr");
+	    
+	    $.ajax({
+	        url: contextPath + "/forgetPasswdSendMail",
+	        method: "post",
+	        type: "json",
+	        data: param,
+	        beforeSend: function() {
+	        	loadingDot.classList.remove("hidden");
+	        	submitStr.classList.add("hidden");
+	        },
+	        complete: function() {
+	        	loadingDot.classList.add("hidden");
+	        	submitStr.classList.remove("hidden");
+	        },
+	        error: function(err) {
+	            utils.alert('서버통신오류');
+	            loadingDot.classList.add("hidden");
+	            submitStr.classList.remove("hidden");
+	        },
+	        success: function(data) {
+	        	if(data == "1"){
+	        		utils.alert('계정 비밀번호 변경을 위해 이메일이 전송되었습니다. 받은 편지함과 스팸함을 확인해보세요.<br>만약, 비밀번호 변경을 원치 않으실 경우 메일은 무시하셔도 됩니다');
+	        	}else{
+	        		createHelp(0, "- 존재하지 않은 이메일입니다");
+	        	}
+	        }
+	    });
 	}
 
 	const handleClickLogin = function(){

@@ -10,8 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.WebUtils;
 
-import com.spring.hs.dto.MemberDTO;
-import com.spring.hs.service.MemberService;
+import com.spring.hs.dto.member.MemberDTO;
+import com.spring.hs.service.member.MemberService;
 
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 

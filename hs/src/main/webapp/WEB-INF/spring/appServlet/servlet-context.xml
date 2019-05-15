@@ -36,6 +36,7 @@
 			<tx:method name="save*" rollback-for="Exception" />
 			<tx:method name="update*" rollback-for="Exception" />
 			<tx:method name="remove*" rollback-for="Exception" />
+			<tx:method name="delete*" rollback-for="Exception" />
 		</tx:attributes>
 	</tx:advice>
 	<tx:annotation-driven />
@@ -92,6 +93,8 @@
 			<mvc:exclude-mapping path="/connect" />
 			<mvc:exclude-mapping path="/register" />
 			<mvc:exclude-mapping path="/getCode" />
+			<mvc:exclude-mapping path="/forgetPasswdSendMail" />
+			<mvc:exclude-mapping path="/reRegisterPasswd" />
 			
 			
 			<beans:bean id="authenticationInterceptor"
@@ -111,10 +114,10 @@
 	</mvc:interceptors>
 
 	<context:component-scan
-		base-package="com.spring.hs.dao" />
+		base-package="com.spring.hs.dao.*" />
 	<context:component-scan
-		base-package="com.spring.hs.service" />
+		base-package="com.spring.hs.service.*" />
 	<context:component-scan
-		base-package="com.spring.hs.controller" />
+		base-package="com.spring.hs.controller.*" />
 
 </beans:beans>

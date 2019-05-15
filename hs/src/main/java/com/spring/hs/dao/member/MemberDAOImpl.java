@@ -1,4 +1,4 @@
-package com.spring.hs.dao;
+package com.spring.hs.dao.member;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -9,8 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.spring.hs.dto.MemberConnectDTO;
-import com.spring.hs.dto.MemberDTO;
+import com.spring.hs.dto.member.MemberConnectDTO;
+import com.spring.hs.dto.member.MemberDTO;
 
 @Repository
 public class MemberDAOImpl implements MemberDAO {
@@ -21,6 +21,19 @@ public class MemberDAOImpl implements MemberDAO {
 	private static final String NAMESPACE = "MemberMapper";
 
 	
+	
+	@Override
+	public boolean changePasswd(Map<String, String> map) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".changePasswd", map);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
 	@Override
 	public String getCcodebyUuid(String uuid) {
 		return sqlSession.selectOne(NAMESPACE+".getCcodebyUuid", uuid);

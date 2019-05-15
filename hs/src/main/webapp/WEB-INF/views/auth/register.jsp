@@ -22,7 +22,7 @@
 					비밀번호 <input type="password" id="passwd" name="passwd" required/>
 				</div>
 				<div class="auth-inner-input nomargin">
-					비밀번호 확인 <input type="password" id="passwdcheck" name="passwdcheck" required/>
+					비밀번호 확인 <input type="password" id="passwdCheck" name="passwdCheck" required/>
 				</div>
 			</div>
 			<div class="auth-button">
@@ -52,9 +52,9 @@
 		initHelp();
 		const email = document.querySelector("#email").value;
 		const passwd = document.querySelector("#passwd").value;
-		const passwdcheck = document.querySelector("#passwdcheck").value;
+		const passwdCheck = document.querySelector("#passwdCheck").value;
 
-		let valid = ![email, passwd, passwdcheck].includes("");
+		let valid = ![email, passwd, passwdCheck].includes("");
 	    if (valid == false) {
 	        return;
 	    }
@@ -70,7 +70,7 @@
 	        return;
 	    }
 	    
-	    if(passwd !== passwdcheck){
+	    if(passwd !== passwdCheck){
 	    	valid = false;
 	    	createHelp(1, " - 비밀번호가 일치하지 않습니다");
 	    	return;

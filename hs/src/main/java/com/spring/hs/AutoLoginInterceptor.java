@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.spring.hs.dto.MemberDTO;
+import com.spring.hs.dto.member.MemberDTO;
 
 public class AutoLoginInterceptor extends HandlerInterceptorAdapter {
 	

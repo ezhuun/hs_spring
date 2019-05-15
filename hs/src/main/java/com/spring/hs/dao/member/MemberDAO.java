@@ -1,4 +1,4 @@
-package com.spring.hs.dao;
+package com.spring.hs.dao.member;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -7,11 +7,12 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.spring.hs.dto.MemberConnectDTO;
-import com.spring.hs.dto.MemberDTO;
+import com.spring.hs.dto.member.MemberConnectDTO;
+import com.spring.hs.dto.member.MemberDTO;
 
 public interface MemberDAO {
 	
+	public boolean changePasswd(Map<String, String> map);
 	public String getCcodebyUuid(String uuid);
 	public MemberDTO checkMemberWithSessionKey(String session_key);
 	public boolean keepLogin(String uuid, String session_key, Date session_limit);
@@ -29,6 +30,7 @@ public interface MemberDAO {
 	public boolean createMemberConnect(Map<String, String> map);
 	public boolean duplicateEmail(String email);
 	public List<String> getAllcode();
+	
 	
 	
 }
