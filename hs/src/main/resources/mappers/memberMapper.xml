@@ -6,6 +6,27 @@
 <mapper namespace="MemberMapper">
 
 
+
+	<update id="disconnectMember">
+		UPDATE
+			member
+		SET
+			c_code = ''
+			, temp_code = #{code}
+		WHERE
+			uuid = #{uuid}
+	</update>
+	
+	<update id="disconnectMemberConnect">
+		UPDATE
+			member_connect
+		SET
+			d_limit = #{d_limit}
+			, d_uuid = #{uuid}
+		WHERE
+			c_code = #{code}
+	</update>
+
 	<!-- 비밀번호 변경 by uuid -->
 	<update id="changePasswd">
 	<![CDATA[

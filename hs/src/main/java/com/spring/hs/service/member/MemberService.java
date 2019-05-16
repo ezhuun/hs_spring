@@ -8,6 +8,8 @@ import com.spring.hs.dto.member.MemberDTO;
 
 public interface MemberService {
 	
+	
+	public boolean updateDisconnectStatus(String uuid, String code, Date limit);
 	public boolean changePasswd(String uuid, String passwd);
 	public String getCcodebyUuid(String uuid);
 	public MemberDTO checkMemberWithSessionKey(String session_key);
@@ -26,5 +28,6 @@ public interface MemberService {
 	public boolean createMember(Map<String, String> map);
 	public Map<String, String> registerMember(String email, String passwd);
 	public boolean duplicateEmail(String email);
+	
 	
 }

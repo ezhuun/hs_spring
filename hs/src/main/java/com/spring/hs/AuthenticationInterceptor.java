@@ -39,6 +39,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
 				if(dto != null) {
 					dto.setLover(service.getConnectedAccount(dto.getUuid()));
+					dto.setConnect(service.getCode(dto.getC_code()));
 					session.setAttribute("member", dto);
 					return true;
 				}

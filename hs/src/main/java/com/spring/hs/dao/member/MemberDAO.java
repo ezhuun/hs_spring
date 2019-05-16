@@ -12,6 +12,8 @@ import com.spring.hs.dto.member.MemberDTO;
 
 public interface MemberDAO {
 	
+	public boolean disconnectMember(Map<String, String> _map);
+	public boolean disconnectMemberConnect(Map<String, Object> map);
 	public boolean changePasswd(Map<String, String> map);
 	public String getCcodebyUuid(String uuid);
 	public MemberDTO checkMemberWithSessionKey(String session_key);
@@ -30,7 +32,6 @@ public interface MemberDAO {
 	public boolean createMemberConnect(Map<String, String> map);
 	public boolean duplicateEmail(String email);
 	public List<String> getAllcode();
-	
 	
 	
 }

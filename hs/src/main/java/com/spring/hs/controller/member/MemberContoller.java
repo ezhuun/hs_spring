@@ -1,6 +1,5 @@
 package com.spring.hs.controller.member;
 
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 import com.spring.hs.Utility;
@@ -45,6 +42,15 @@ public class MemberContoller {
 	
 	
 	
+	@PostMapping("/disconnect")
+	public String disconnect(String uuid, String code) {
+		//[member_connect] 그대로유지 대신 limit기간설정과 d_status업데이트
+		//[member] c_code 초기화, temp_code다시 발급..
+		Date limit = new Date(System.currentTimeMillis() + (1000*amount));
+		service.updateDisconnectStatus(uuid, code, limit);
+		return "redirect:/logout";
+	}
+	
 	@ResponseBody
 	@PostMapping("/reRegisterPasswd")
 	public String reRegisterPasswd(String uuid, String passwd) {
@@ -54,8 +60,7 @@ public class MemberContoller {
 		if(flag) {
 			result = "1";
 		}
-		System.out.println(uuid+passwd);
-		System.out.println("result:" +result);
+		
 		return result;
 	}
 	
@@ -157,6 +162,7 @@ public class MemberContoller {
 					
 					//연결된 계정정보를 가져온다..
 					dto.setLover(service.getConnectedAccount(dto.getUuid()));
+					dto.setConnect(service.getCode(dto.getC_code()));
 					
 
 					//유저 uuid 세션 기록
@@ -212,6 +218,7 @@ public class MemberContoller {
 			dto.setPasswd(null);
 			service.lastLoginUpdate(dto.getUuid());
 			dto.setLover(service.getConnectedAccount(dto.getUuid()));
+			dto.setConnect(service.getCode(dto.getC_code()));
 
 			session.setMaxInactiveInterval(amount);
 			session.setAttribute("member", dto);

@@ -22,6 +22,31 @@ public class MemberDAOImpl implements MemberDAO {
 
 	
 	
+	
+	@Override
+	public boolean disconnectMember(Map<String, String> map) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".disconnectMember", map);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean disconnectMemberConnect(Map<String, Object> map) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".disconnectMemberConnect", map);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
 	@Override
 	public boolean changePasswd(Map<String, String> map) {
 		boolean flag = false;

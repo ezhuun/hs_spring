@@ -5,12 +5,32 @@ public class MemberConnectDTO {
 	private String c_code;
 	private String u1;
 	private String u2;
-	
-	
+	private String d_status;
+	private String d_limit;
+	private String d_uuid;
 	
 	@Override
 	public String toString() {
-		return "MemberConnectDTO [c_no=" + c_no + ", c_code=" + c_code + ", u1=" + u1 + ", u2=" + u2 + "]";
+		return "MemberConnectDTO [c_no=" + c_no + ", c_code=" + c_code + ", u1=" + u1 + ", u2=" + u2 + ", d_status="
+				+ d_status + ", d_limit=" + d_limit + ", d_uuid=" + d_uuid + "]";
+	}
+	public String getD_status() {
+		return d_status;
+	}
+	public void setD_status(String d_status) {
+		this.d_status = d_status;
+	}
+	public String getD_limit() {
+		return d_limit;
+	}
+	public void setD_limit(String d_limit) {
+		this.d_limit = d_limit;
+	}
+	public String getD_uuid() {
+		return d_uuid;
+	}
+	public void setD_uuid(String d_uuid) {
+		this.d_uuid = d_uuid;
 	}
 	public int getC_no() {
 		return c_no;

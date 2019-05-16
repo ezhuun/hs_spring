@@ -1,6 +1,7 @@
 package com.spring.hs.service.member;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,44 @@ public class MemberServiceImpl implements MemberService{
 	@Autowired
 	private JavaMailSender mailSender;
 	
+	
+	
+	
+	@Override
+	public boolean updateDisconnectStatus(String uuid, String code, Date limit) {
+		boolean flag = false;
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("uuid", uuid);
+		map.put("code", code);
+		map.put("d_limit", limit);
+		
+		try {
+			//[member_connect] 그대로유지 대신 limit기간설정과 d_status업데이트
+			flag = dao.disconnectMemberConnect(map);
+			
+			if(flag) {
+				//temp_code다시 발급..
+				List<String> list = dao.getAllcode();
+				String c_code = Utility.randomKey(list, 8);
+				
+				Map<String, String> _map = new HashMap<String, String>();
+				_map.put("uuid", uuid);
+				_map.put("code", c_code);
+				
+				
+				//[member_connect] c_code발급
+				flag = dao.createMemberConnect(_map);
+				//[member] c_code 초기화, temp_code업데이트
+				flag = dao.disconnectMember(_map);
+			}
+		} catch (Exception e) {}
+		
+
+		
+		return flag;
+	}
+
 	@Override
 	public boolean changePasswd(String uuid, String passwd) {
 		Map<String, String> map = new HashMap<String, String>();

@@ -20,19 +20,23 @@ public class MemberDTO {
 	private String c_code;
 	private String gender;
 	private MemberDTO lover;
+	private MemberConnectDTO connect;
 	
 
-	
 	@Override
 	public String toString() {
 		return "MemberDTO [no=" + no + ", uuid=" + uuid + ", email=" + email + ", passwd=" + passwd + ", name=" + name
 				+ ", birth=" + birth + ", begin_date=" + begin_date + ", regdt=" + regdt + ", last_login=" + last_login
 				+ ", auth_key=" + auth_key + ", auth_status=" + auth_status + ", session_key=" + session_key
 				+ ", session_limit=" + session_limit + ", profile=" + profile + ", temp_code=" + temp_code + ", c_code="
-				+ c_code + ", gender=" + gender + ", lover=" + lover + "]";
+				+ c_code + ", gender=" + gender + ", lover=" + lover + ", connect=" + connect + "]";
 	}
-	
-
+	public MemberConnectDTO getConnect() {
+		return connect;
+	}
+	public void setConnect(MemberConnectDTO connect) {
+		this.connect = connect;
+	}
 	public MemberDTO getLover() {
 		return lover;
 	}
