@@ -1,19 +1,9 @@
---테이블 등록은 member_connect -> member 테이블 순으로
---테이블 삭제는 member -> member_connect 테이블 순으로
---member테이블의 c_code는 member_connect테이블의 c_code를 참조한다
-
--- 계정 생성시 temp_code를 발급하여 user_connect테이블에 code, u1 필드를 입력한다.
--- 계정 연결시 u2필드에 상대방 uid를 등록한다
--- 연결된 두 uid의 code필드를 업데이트한다
-
-
---------------------------------------------TABLE SETTING #1
 drop table member;
 create table member (
   no                    number(11)			NOT NULL,
   uuid					varchar(100)			NOT NULL ,
   email					varchar(50)		    UNIQUE NOT NULL,
-  passwd				varcQhar(100)		NOT NULL,
+  passwd				varchar(100)		NOT NULL,
   name					varchar(20)			DEFAULT '',
   gender                   char(1)             DEFAULT '',
   birth                 varchar(20)         DEFAULT '',
@@ -31,31 +21,35 @@ create table member (
 select * from member;
 delete from member;
 
---------------------------------------------TABLE SETTING #2
+-- 계정 생성시 temp_code를 발급하여 user_connect테이블에 code, u1 필드를 입력한다.
+-- 계정 연결시 u2필드에 상대방 uid를 등록한다
+-- 연결된 두 uid의 code필드를 업데이트한다
+
 drop table member_connect;
 create table member_connect(
-  c_no                    number(11)			NOT NULL,
-  c_code                varchar(8)          NOT NULL,
+  c_no                  number(11)			    NOT NULL,
+  c_code                varchar(8)              NOT NULL,
   u1                    varchar(100)			NOT NULL,
   u2                    varchar(100)			DEFAULT '',
+  d_status              number(1)               default 0 not null,
+  d_limit               timestamp,
+  d_uuid                varchar(100)            default '',
   primary key(c_code)
 );
 select * from member_connect;
 delete from member_connect;
-
-
 --------------------------------------------------------------------------------------------
 
---------------------------------------------회원가입
 
---#1-1
+
+--#1
 insert into member_connect (c_no, c_code, u1)
 values(
    (SELECT NVL(MAX(c_no+1), 0) FROM member_connect),
    '12345678',
    'uuid'
 );
---#1-2
+--#2
 insert into member (no, uuid, email, passwd, regdt, last_login,  temp_code)
 values(
     (SELECT NVL(MAX(no+1), 0) FROM member),
@@ -66,15 +60,14 @@ values(
     sysdate,
     '12345678'
 );
-
---#2-1
+--#3
 insert into member_connect (c_no, c_code, u1)
 values(
    (SELECT NVL(MAX(c_no+1), 0) FROM member_connect),
    '87654321',
    'uuid2'
 );
---#2-2
+--#4
 insert into member (no, uuid, email, passwd, regdt, last_login,  temp_code)
 values(
     (SELECT NVL(MAX(no+1), 0) FROM member),
@@ -85,16 +78,42 @@ values(
     sysdate,
     '87654321'
 );
-
---------------------------------------------계정연결
---#계정 연결3-1
+--#계정 연결5
 update member_connect set u2='uuid2' where c_code='12345678';
 
---#계정 연결3-2
+--#계정 연결6
 update member set c_code='12345678' where temp_code='12345678' or uuid='uuid2';
 
+--연결된 계정정보 select
+SELECT * 
+FROM member 
+WHERE
+    c_code = (SELECT c_code FROM MEMBER WHERE uuid='408b484556544f3c9290ae0de99fa8b2')
+    AND uuid!='408b484556544f3c9290ae0de99fa8b2';
 
+/*
+ **** 연결끊기..
+ - 연결끊기 시도한 사용자의 [member] c_code 초기화, temp_code다시 발급..
+ - 연결코드 [member_connect] 그대로유지 대신 limit기간설정..
+------- 사용자1이 연결끊기 시도한 경우
+
+ - limit 기간체크는 스크립트 setintaval 또는 로그인 시 체크...
+ - limit기간이 만료됬을경우
+	- [member_connect] c_code레코드 d_status 1로 업데이트, 상대방 [member] c_code초기화
+
+ - 만약, limit기간내 다시 연결할 경우
+	- 상대방의 연결코드를 공유할 수 있어야함.
+	- [member_connect] d_limit 해제, d_uuid초기화
+
+
+
+
+ **** 계정탈퇴..
+ - 해당계정은 필드 disabled를 이용하여 로그인 안되도록 설정.
+ - 상대방 계정은 연결끊기 시 기능과 유사하게 limit기간까지 게시물 확인가능
+ - limit기간 만료시 상대방계정 c_code초기화
+*/
 
 select * from member;
-select uuid, email, profile, c_code from member;
+select uuid, email, profile, temp_code, c_code from member;
 select * from member_connect;
