@@ -7,32 +7,39 @@
 
 
 	<delete id="deleteMember">
+	<![CDATA[
 		DELETE
 		FROM
 			member
 		WHERE
 			uuid = #{uuid}
+	]]>
 	</delete>
 	
 	<delete id="deleteCode">
+	<![CDATA[
 		DELETE
 		FROM
 			member_connect
 		WHERE
 			c_code = #{code}
 			AND d_status='0'
+	]]>
 	</delete>
 
 	<update id="clearCcode">
+	<![CDATA[
 		UPDATE
 			member
 		SET
 			c_code = ''
 		WHERE
 			uuid = #{uuid}
+	]]>
 	</update>
 	
 	<update id="deleteMemberConnectU2">
+	<![CDATA[
 		UPDATE
 			member_connect
 		SET
@@ -40,9 +47,11 @@
 		WHERE
 			c_code = #{code}
 			AND d_status='0'
+	]]>
 	</update>
 	
 	<update id="changeMemberConnectUUID">
+	<![CDATA[
 		UPDATE
 			member_connect
 		SET
@@ -51,18 +60,22 @@
 		WHERE
 			c_code = #{code}
 			AND d_status='0'
+	]]>
 	</update>
 	
 	<update id="tempCodeChange">
+	<![CDATA[
 		UPDATE
 			member
 		SET
 			temp_code = c_code
 		WHERE
 			uuid = #{uuid}
+	]]>
 	</update>
 	
 	<update id="disabledCode">
+	<![CDATA[
 		UPDATE
 			member_connect
 		SET
@@ -70,9 +83,11 @@
 		WHERE
 			c_code = #{temp_code}
 			AND d_status='0'
+	]]>
 	</update>
 	
 	<update id="disconnectMember">
+	<![CDATA[
 		UPDATE
 			member
 		SET
@@ -80,9 +95,11 @@
 			, temp_code = #{code}
 		WHERE
 			uuid = #{uuid}
+	]]>
 	</update>
 	
 	<update id="disconnectMemberConnect">
+	<![CDATA[
 		UPDATE
 			member_connect
 		SET
@@ -91,6 +108,7 @@
 		WHERE
 			c_code = #{code}
 			AND d_status='0'
+	]]>
 	</update>
 
 	<!-- 비밀번호 변경 by uuid -->

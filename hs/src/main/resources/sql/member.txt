@@ -37,7 +37,7 @@ create table member_connect(
 select * from member_connect;
 delete from member_connect;
 --------------------------------------------------------------------------------------------
---관리자계정생성
+--관리자계정생성 (id=dev passwd=1234)
 --#1(코드생성)
 insert into member_connect (c_no, c_code, u1)
 values(
