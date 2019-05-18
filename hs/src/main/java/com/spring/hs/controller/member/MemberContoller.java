@@ -34,20 +34,53 @@ public class MemberContoller {
 	private static final Logger logger = LoggerFactory.getLogger(MemberContoller.class);
 	
 	@Autowired
-	MemberService service;
+	private MemberService service;
 	
 	//세션기간 설정
 	private int amount = (60 * 60 * 24) * 3;
 	//private int amount = 10;
 	
 	
+	public void MemberContorller() {
+		System.out.println(service);
+	}
 	
+	@ResponseBody
+	@PostMapping("/deleteMember")
+	public Map<String, String> deleteMember(String uuid, String passwd) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("result", "0");
+		
+		MemberDTO dto = service.getMemberByUuid(uuid);
+		boolean pflag = service.passwdCheck(passwd, dto.getPasswd());
+		if(pflag == true) {
+			//연결을 먼저 끊고..
+			Date limit = new Date(System.currentTimeMillis() + (1000*amount));
+			service.updateDisconnectStatus(uuid, limit);
+			
+			//멤버레코드 삭제.. 또는 disabled처리
+			boolean flag = service.deleteMember(uuid);
+			if(flag) {
+				map.put("result", "1");
+			}else {
+				map.put("result", "2");
+			}
+		}
+		
+		return map;
+	}
+	
+	public MemberContoller() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	@PostMapping("/disconnect")
-	public String disconnect(String uuid, String code) {
+	public String disconnect(String uuid) {
 		//[member_connect] 그대로유지 대신 limit기간설정과 d_status업데이트
 		//[member] c_code 초기화, temp_code다시 발급..
 		Date limit = new Date(System.currentTimeMillis() + (1000*amount));
-		service.updateDisconnectStatus(uuid, code, limit);
+		service.updateDisconnectStatus(uuid, limit);
 		return "redirect:/logout";
 	}
 	
@@ -138,33 +171,16 @@ public class MemberContoller {
 		
 		MemberDTO dto = service.getMemberByEmail(email);
 		if(dto != null) {
-			//이메일이 존재한다면
+			//계정정보가 존재한다면
 			boolean pflag = service.passwdCheck(passwd, dto.getPasswd());
 			
 			if(pflag == true) {
 				//비밀번호가 일치한다면..
 				dto.setPasswd(null);
 				
-				//계정연결에 했는지..
-				if(dto.getC_code() == null) {
-					//계정연결 페이지 이동
-					map.put("uuid", dto.getUuid());
-					map.put("code", dto.getTemp_code());
-					map.put("result", "3");
-				}else if(dto.getName() == null) {
-					//프로필입력페이지 이동
-					map.put("uuid", dto.getUuid());
-					map.put("result", "4");
-				}else {
-					//문제없다면
-					//로그인 성공
+				//관리자계정일경우
+				if(dto.getLev() == 1) {
 					service.lastLoginUpdate(dto.getUuid());
-					
-					//연결된 계정정보를 가져온다..
-					dto.setLover(service.getConnectedAccount(dto.getUuid()));
-					dto.setConnect(service.getCode(dto.getC_code()));
-					
-
 					//유저 uuid 세션 기록
 					session.setMaxInactiveInterval(amount);
 					session.setAttribute("member", dto);
@@ -182,6 +198,69 @@ public class MemberContoller {
 					
 					//로그인 성공
 					map.put("result", "1");
+				}else {
+					//일반계정인 경우
+					
+					//계정연결에 했는지..
+					boolean tflag = true;
+					if(dto.getC_code() != null) {
+						//계정연결이 되었있는 경우
+						MemberConnectDTO cdto = service.getCode(dto.getC_code());
+						
+						//c_code의 d_status가 0이면서 d_limit이 설정되어있는지 확인한다.
+						if(cdto.getD_status().equals("0") && cdto.getD_limit() != null) {
+							//만약 limit이 초과되었다면 계정연결해제를 한다
+							long diff = Utility.validDiffTime(cdto.getD_limit());
+							if(diff >= 0) {
+								Date limit = new Date(System.currentTimeMillis() + (1000*amount));
+								service.updateDisconnectStatus(dto.getUuid(), limit);
+								map.put("result", "5");
+								tflag = false;
+							}
+						}
+					}
+					
+					if(dto.getC_code() == null) {
+						//계정연결 페이지 이동
+						map.put("uuid", dto.getUuid());
+						map.put("code", dto.getTemp_code());
+						map.put("result", "3");
+					}else if(dto.getName() == null) {
+						//프로필입력페이지 이동
+						map.put("uuid", dto.getUuid());
+						map.put("result", "4");
+					}else if(tflag == true){
+						//문제없다면
+						//로그인 성공
+						service.lastLoginUpdate(dto.getUuid());
+						
+						//연결된 계정정보를 가져온다..
+						dto.setLover(service.getConnectedAccount(dto.getUuid()));
+						dto.setConnect(service.getCode(dto.getC_code()));
+						
+
+						//유저 uuid 세션 기록
+						session.setMaxInactiveInterval(amount);
+						session.setAttribute("member", dto);
+						
+						//자동로그인 체크시 쿠키 데이터 저장
+						if(isLogin.equals("y")) {
+							Cookie cookie = new Cookie("cookieLogin", session.getId());
+							cookie.setMaxAge(amount);
+							cookie.setPath("/");
+							response.addCookie(cookie);
+							
+							Date session_limit = new Date(System.currentTimeMillis() + (1000*amount));
+							service.keepLogin(dto.getUuid(), session.getId(), session_limit);
+						}
+						
+						//로그인 성공
+						map.put("result", "1");
+					
+					}
+				
+				
+
 				}
 			}else {
 				//비밀번호가 일치하지 않는다면
@@ -196,6 +275,7 @@ public class MemberContoller {
 		//"2" => 비밀번호 불일치
 		//"3" => 계정연결페이지이동
 		//"4" => 프로필입력페이지 이동
+		//"5" => 계정연결 유효기간 만료
 		return map;
 	}
 	
@@ -275,7 +355,10 @@ public class MemberContoller {
 		
 		MemberConnectDTO dto = service.getCode(code);
 		if(dto != null) {
-			if(dto.getU1().equals(uuid)) {
+			if(dto.getC_code().equals("00000000")) {
+				map.put("result", "5");
+				map.put("msg", "관리자전용 코드입니다");
+			}else if(dto.getU1().equals(uuid)) {
 				map.put("result", "2");
 				map.put("msg", "자신의 초대코드는 등록할 수 없습니다");
 			}else {

@@ -25,46 +25,95 @@ import com.spring.hs.dto.member.MemberDTO;
 public class MemberServiceImpl implements MemberService{
 
 	@Autowired
-	MemberDAO dao;
+	private MemberDAO dao;
 	@Autowired
-	BCryptPasswordEncoder passwordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	private JavaMailSender mailSender;
 	
-	
-	
-	
+
 	@Override
-	public boolean updateDisconnectStatus(String uuid, String code, Date limit) {
+	public boolean deleteMember(String uuid) {
 		boolean flag = false;
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("uuid", uuid);
-		map.put("code", code);
-		map.put("d_limit", limit);
+		MemberDTO dto = getMemberByUuid(uuid);
 		
 		try {
-			//[member_connect] 그대로유지 대신 limit기간설정과 d_status업데이트
-			flag = dao.disconnectMemberConnect(map);
-			
-			if(flag) {
-				//temp_code다시 발급..
-				List<String> list = dao.getAllcode();
-				String c_code = Utility.randomKey(list, 8);
-				
-				Map<String, String> _map = new HashMap<String, String>();
-				_map.put("uuid", uuid);
-				_map.put("code", c_code);
-				
-				
-				//[member_connect] c_code발급
-				flag = dao.createMemberConnect(_map);
-				//[member] c_code 초기화, temp_code업데이트
-				flag = dao.disconnectMember(_map);
-			}
-		} catch (Exception e) {}
-		
+			dao.deleteMember(dto.getUuid());
+			dao.deleteCode(dto.getTemp_code());
+			flag = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
+		return flag;
+	}
+
+	@Override
+	public boolean updateDisconnectStatus(String uuid, Date limit) {
+		boolean flag = false;
+		MemberDTO dto = getMemberByUuid(uuid);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("uuid", dto.getUuid());
+		map.put("code", dto.getC_code());
+		map.put("d_limit", limit);
+		
+		if(dto != null) {
+		
+			try {
+				//[MEMBER_CONNECT] disabled status 변경
+				dao.disconnectMemberConnect(map);
+		
+				//TEMP_CODE와 C_CODE를 비교한다..
+				//둘 중 누구의 코드로 연결되었는지 확인..
+				//최적화를 위함...
+				if(dto.getC_code().equals(dto.getTemp_code())) {
+					//만약 같다면.. 내 코드로 연결되어있는상태
+					//즉, MEMBER_CONNECT U1은 나 자신
+					
+					//상대방 정보 _dto
+					MemberDTO _dto = getConnectedAccount(dto.getUuid());
+					if(_dto != null && _dto.getC_code() != null) {
+						//[MEMBER_CONNECT] U2 -> U1, U2 == NULL ...UPDATE
+						dao.changeMemberConnectUUID(dto.getC_code());
+						//상대방의 기존 TEMP_CODE [MEMBER_CONNECT]는 삭제..
+						dao.deleteCode(_dto.getTemp_code());
+						//상대방의 [MEMBER] C_CODE -> TEMP_CODE로 변경
+						dao.tempCodeChange(_dto.getUuid());
+					}else {
+						//상대방이 연결을 먼저끊었다면..
+						//기존 code disabled
+						dao.disabledCode(dto.getC_code());
+					}
+
+					//TEMP_CODE 다시 발급..
+					List<String> list = dao.getAllcode();
+					String c_code = Utility.randomKey(list, 8);
+					
+					Map<String, String> _map = new HashMap<String, String>();
+					_map.put("uuid", dto.getUuid());
+					_map.put("code", c_code);
+					
+					//[MEMBER_CONNECT] C_CODE 입력
+					dao.createMemberConnect(_map);
+					//[MEMBER] C_CODE 초기화, TEMP_CODE업데이트
+					dao.disconnectMember(_map);
+				}else {
+					//같지 않다면
+					//상대방 코드로 연결되어있는 상태
+					
+					//MEMBER_CONNECT U2는 나자신이기 때문에 삭제
+					dao.deleteMemberConnectU2(dto.getC_code());
+					//내 temp_code는 아직 사용하지 않았기 때문에
+					//code를 다시 발급받을 필요가 없다. 기존C_CODE만 초기화
+					dao.clearCcode(dto.getUuid());
+				}
+				
+				flag = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}	// end of if(dto!=null)
 		
 		return flag;
 	}
@@ -143,7 +192,9 @@ public class MemberServiceImpl implements MemberService{
 		map.put("code", code);
 		
 		flag = dao.updateMemberConnectCode(map);
-		flag = dao.updateMemberCode(map);
+		if(flag == true) {
+			flag = dao.updateMemberCode(map);
+		}
 		
 		return flag;
 	}
@@ -195,7 +246,9 @@ public class MemberServiceImpl implements MemberService{
 		boolean flag = false;
 		
 		flag = dao.createMemberConnect(map);
-		flag = dao.createMember(map);
+		if(flag == true) {
+			flag = dao.createMember(map);
+		}
 		
 		return flag;
 	}

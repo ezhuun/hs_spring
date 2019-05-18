@@ -13,17 +13,15 @@ create table member (
   session_key           varchar(50)         DEFAULT 'none' NOT NULL,
   session_limit         timestamp,
   profile           varchar(255)        DEFAULT '',
-  temp_code             varchar(8)          DEFAULT '' not null,
+  temp_code             varchar(8)          DEFAULT '' NOT NULL,
   c_code                varchar(8)          DEFAULT '',
+  lev                 number(1)           DEFAULT 9 NOT NULL,             
   primary key ( uuid ),
   foreign key(c_code) references member_connect(c_code)
 );
 select * from member;
 delete from member;
 
--- 계정 생성시 temp_code를 발급하여 user_connect테이블에 code, u1 필드를 입력한다.
--- 계정 연결시 u2필드에 상대방 uid를 등록한다
--- 연결된 두 uid의 code필드를 업데이트한다
 
 drop table member_connect;
 create table member_connect(
@@ -39,7 +37,31 @@ create table member_connect(
 select * from member_connect;
 delete from member_connect;
 --------------------------------------------------------------------------------------------
+--관리자계정생성
+--#1(코드생성)
+insert into member_connect (c_no, c_code, u1)
+values(
+   (SELECT NVL(MAX(c_no+1), 0) FROM member_connect),
+   '00000000',
+   'developer'
+);
+--#2(회원등록)
+insert into member (no, uuid, name, email, passwd, regdt, last_login, temp_code, c_code, lev)
+values(
+    (SELECT NVL(MAX(no+1), 0) FROM member)
+    , 'developer'
+    , 'developer'
+    , 'dev'
+    , '$2a$10$a40sP2IsjHIC0/E/fQ/7cOympZruRX1J4MAAQPTuKQjc4CP33xf1y'
+    , sysdate
+    , sysdate
+    , '00000000'
+    , '00000000'
+    , 1
+);
 
+--------------------------------------------------------------------------------------------
+--일반계정생성 및 계정연결
 
 
 --#1
@@ -117,3 +139,9 @@ WHERE
 select * from member;
 select uuid, email, profile, temp_code, c_code from member;
 select * from member_connect;
+
+
+
+
+
+

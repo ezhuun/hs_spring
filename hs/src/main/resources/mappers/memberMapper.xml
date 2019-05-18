@@ -6,7 +6,72 @@
 <mapper namespace="MemberMapper">
 
 
+	<delete id="deleteMember">
+		DELETE
+		FROM
+			member
+		WHERE
+			uuid = #{uuid}
+	</delete>
+	
+	<delete id="deleteCode">
+		DELETE
+		FROM
+			member_connect
+		WHERE
+			c_code = #{code}
+			AND d_status='0'
+	</delete>
 
+	<update id="clearCcode">
+		UPDATE
+			member
+		SET
+			c_code = ''
+		WHERE
+			uuid = #{uuid}
+	</update>
+	
+	<update id="deleteMemberConnectU2">
+		UPDATE
+			member_connect
+		SET
+			u2 = ''
+		WHERE
+			c_code = #{code}
+			AND d_status='0'
+	</update>
+	
+	<update id="changeMemberConnectUUID">
+		UPDATE
+			member_connect
+		SET
+			u1 = u2
+			, u2 = ''
+		WHERE
+			c_code = #{code}
+			AND d_status='0'
+	</update>
+	
+	<update id="tempCodeChange">
+		UPDATE
+			member
+		SET
+			temp_code = c_code
+		WHERE
+			uuid = #{uuid}
+	</update>
+	
+	<update id="disabledCode">
+		UPDATE
+			member_connect
+		SET
+			d_status = '1'
+		WHERE
+			c_code = #{temp_code}
+			AND d_status='0'
+	</update>
+	
 	<update id="disconnectMember">
 		UPDATE
 			member
@@ -25,6 +90,7 @@
 			, d_uuid = #{uuid}
 		WHERE
 			c_code = #{code}
+			AND d_status='0'
 	</update>
 
 	<!-- 비밀번호 변경 by uuid -->
@@ -48,7 +114,7 @@
 	]]>
 	</select>
 	
-	<select id="checkMemberWithSessionKey" resultType="com.spring.hs.dto.member.MemberDTO">
+	<select id="checkMemberWithSessionKey" resultType="MemberDTO">
 	<![CDATA[
 		SELECT
 			*
@@ -75,7 +141,7 @@
 	
 	
 	<!-- 연결된 계정 정보를 가져온다 -->
-	<select id="getConnectedAccount" resultType="com.spring.hs.dto.member.MemberDTO">
+	<select id="getConnectedAccount" resultType="MemberDTO">
 	<![CDATA[
 		SELECT
 			uuid
@@ -127,7 +193,7 @@
 	</update>
 
 	<!-- member recoard return by uuid -->
-	<select id="getMemberByEmail" resultType="com.spring.hs.dto.member.MemberDTO">
+	<select id="getMemberByEmail" resultType="MemberDTO">
 	<![CDATA[
 		SELECT *
 		FROM member
@@ -136,7 +202,7 @@
 	</select>
 
 	<!-- member recoard return by uuid -->
-	<select id="getMemberByUuid" resultType="com.spring.hs.dto.member.MemberDTO">
+	<select id="getMemberByUuid" resultType="MemberDTO">
 	<![CDATA[
 		SELECT *
 		FROM member
@@ -168,16 +234,20 @@
 	<![CDATA[
 		UPDATE member_connect
 		SET u2 = '${uuid}'
+			, d_limit = ''
+			, d_uuid = ''
 		WHERE c_code = #{code}
+			AND d_status = '0'
 	]]>
 	</update>
 
 	<!-- c_code select -->
-	<select id="getCode" resultType="com.spring.hs.dto.member.MemberConnectDTO">
+	<select id="getCode" resultType="MemberConnectDTO">
 	<![CDATA[
 		SELECT *
 		FROM member_connect
 		WHERE c_code = #{code}
+			AND d_status = '0'
 	]]>
 	</select>
 

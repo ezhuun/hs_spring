@@ -23,6 +23,91 @@ public class MemberDAOImpl implements MemberDAO {
 	
 	
 	
+	
+	@Override
+	public boolean deleteMember(String uuid) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.delete(NAMESPACE+".deleteMember", uuid);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean deleteCode(String code) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".deleteCode", code);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean clearCcode(String uuid) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".clearCcode", uuid);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean deleteMemberConnectU2(String code) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".deleteMemberConnectU2", code);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean changeMemberConnectUUID(String code) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".changeMemberConnectUUID", code);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean tempCodeChange(String uuid) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".tempCodeChange", uuid);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
+	@Override
+	public boolean disabledCode(String temp_code) {
+		boolean flag = false;
+		
+		int cnt = sqlSession.update(NAMESPACE+".disabledCode", temp_code);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
+	}
+
 	@Override
 	public boolean disconnectMember(Map<String, String> map) {
 		boolean flag = false;

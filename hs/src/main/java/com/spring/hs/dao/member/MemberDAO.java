@@ -12,26 +12,41 @@ import com.spring.hs.dto.member.MemberDTO;
 
 public interface MemberDAO {
 	
-	public boolean disconnectMember(Map<String, String> _map);
-	public boolean disconnectMemberConnect(Map<String, Object> map);
-	public boolean changePasswd(Map<String, String> map);
-	public String getCcodebyUuid(String uuid);
-	public MemberDTO checkMemberWithSessionKey(String session_key);
-	public boolean keepLogin(String uuid, String session_key, Date session_limit);
-	public MemberDTO getConnectedAccount(String uuid);
-	public void lastLoginUpdate(String uuid);
-	public boolean updateProfile(MemberDTO dto);
-	public boolean updatePhoto(String uuid, String photo);
-	public MemberDTO getMemberByUuid(String uuid);
-	public MemberDTO getMemberByEmail(String email);
-	public boolean validCode(String uuid);
-	public boolean updateMemberCode(Map<String, String> map);
-	public boolean updateMemberConnectCode(Map<String, String> map);
-	public MemberConnectDTO getCode(String code);
-	public boolean createMember(Map<String, String> map);
-	public boolean createMemberConnect(Map<String, String> map);
-	public boolean duplicateEmail(String email);
-	public List<String> getAllcode();
+	
+	boolean deleteMember(String uuid);
+	boolean deleteCode(String code);
+	boolean clearCcode(String uuid);
+	boolean deleteMemberConnectU2(String code);
+	boolean changeMemberConnectUUID(String code);
+	boolean tempCodeChange(String uuid);
+	boolean disabledCode(String temp_code);
+	boolean disconnectMember(Map<String, String> _map);
+	boolean disconnectMemberConnect(Map<String, Object> map);
+	boolean changePasswd(Map<String, String> map);
+	String getCcodebyUuid(String uuid);
+	MemberDTO checkMemberWithSessionKey(String session_key);
+	boolean keepLogin(String uuid, String session_key, Date session_limit);
+	MemberDTO getConnectedAccount(String uuid);
+	void lastLoginUpdate(String uuid);
+	boolean updateProfile(MemberDTO dto);
+	boolean updatePhoto(String uuid, String photo);
+	MemberDTO getMemberByUuid(String uuid);
+	MemberDTO getMemberByEmail(String email);
+	boolean validCode(String uuid);
+	boolean updateMemberCode(Map<String, String> map);
+	boolean updateMemberConnectCode(Map<String, String> map);
+	MemberConnectDTO getCode(String code);
+	boolean createMember(Map<String, String> map);
+	boolean createMemberConnect(Map<String, String> map);
+	boolean duplicateEmail(String email);
+	List<String> getAllcode();
+	
+	
+	
+	
+	
+	
+	
 	
 	
 }

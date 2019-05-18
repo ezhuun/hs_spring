@@ -1,11 +1,11 @@
 package com.spring.hs;
 
-import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.WebUtils;
@@ -15,14 +15,8 @@ import com.spring.hs.service.member.MemberService;
 
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
-	@Inject
+	@Autowired
 	MemberService service;
-
-	
-	
-	public AuthenticationInterceptor() {
-		System.out.println("===================   인터럽트실행[AuthEntication]    ===================");
-	}
 
 	// preHandle() : 컨트롤러보다 먼저 수행되는 메서드
 	@Override
@@ -41,6 +35,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 					dto.setLover(service.getConnectedAccount(dto.getUuid()));
 					dto.setConnect(service.getCode(dto.getC_code()));
 					session.setAttribute("member", dto);
+					
 					return true;
 				}
 			}
@@ -49,10 +44,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 			// 로그인이 안되어 있는 상태임으로 로그인 폼으로 다시 돌려보냄(redirect)
 			response.sendRedirect(request.getContextPath()+"/login");
 			return false;
+		}else {
+			MemberDTO _dto = (MemberDTO)obj;
+			MemberDTO dto = service.getMemberByUuid(_dto.getUuid());
+			dto.setLover(service.getConnectedAccount(dto.getUuid()));
+			dto.setConnect(service.getCode(dto.getC_code()));
+			try {
+				session.setAttribute("member", dto);
+			} catch (Exception e) {}
 		}
 		
-		// preHandle의 return은 컨트롤러 요청 uri로 가도 되냐 안되냐를 허가하는 의미임
-		// 따라서 true로하면 컨트롤러 uri로 가게 됨.
+		
 		return true;
 	}
 	
@@ -60,7 +62,6 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		// TODO Auto-generated method stub
 		super.postHandle(request, response, handler, modelAndView);
 	}
 	

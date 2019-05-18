@@ -65,7 +65,7 @@
 <script type="text/javascript">
 	document.addEventListener("DOMContentLoaded", function(){
 		const beegin_date = document.querySelector("#begin_date");
-		begin_date.addEventListener('click', function() {
+		beegin_date.addEventListener('click', function() {
 		  picker.open();
 		}, false);
 
@@ -75,7 +75,7 @@
 		}, false);
 
 		const picker= new MaterialDatetimePicker({
-			el: begin_date,
+			el: beegin_date,
 			format: 'YYYY-MM-DD',
 			openedBy: 'focus'
 		});
@@ -86,73 +86,3 @@
 		});
 	});
 </script>
-
-<script>
-	const handleClickUpdateProfile = function(){
-		initHelp();
-		const name = document.querySelector("#name").value.trim();
-		if(name.length < 2){
-			createHelp(1, " - 최소 2자리 이상 입력해주세요");
-			return;
-		}
-		if(new RegExp('[`~!@#$%^&*|\\\'\";:\/?]','gi').test(name) == true){
-			createHelp(1, " - 특수문자는 포함할 수 없습니다");
-			return;
-		}
-		
-		const param = $("#frm").serialize();
-	    const loadingDot = document.querySelector(".loadingDot");
-	    const submitStr = document.querySelector(".submitStr");
-	    $.ajax({
-	        url: contextPath + "/updateProfile",
-	        method: "post",
-	        type: "json",
-	        data: param,
-	        beforeSend: function() {
-	        	loadingDot.classList.remove("hidden");
-	            submitStr.classList.add("hidden");
-	        },
-	        complete: function() {
-	        	loadingDot.classList.add("hidden");
-	            submitStr.classList.remove("hidden");
-	        },
-	        error: function(err) {
-	            utils.alert('서버에러');
-	            loadingDot.classList.add("hidden");
-	            submitStr.classList.remove("hidden");
-	        },
-	        success: function(data) {
-	        	if(data != "0"){
-	        		location.href = contextPath + "/main";
-	        	}else{
-	        		utils.alert('로그인에 실패했습니다');
-	        	}
-	        }
-	    });
-	}
-
-	const handleChangePhoto = function(e){
-		let file = e.target.files[0];
-		let formData = new FormData();
-		formData.append("file", file);
-		formData.append("uuid", document.querySelector("#uuid").value.trim());
-		
-		$.ajax({
-			url: contextPath + "/upload/uploadAjax",
-			method: "post",
-			type: "json",
-			data: formData,
-			processData: false,
-			contentType: false,
-			success: function (data) {
-				if(data != "0"){
-					document.querySelector("#profileImage").src=contextPath + "/upload/profile/" + data;
-				}else{
-					utils.alert('이미지 등록 실패');
-				}
-			}
-		});
-	}
-</script>
-
-

@@ -19,6 +19,7 @@ public class MemberDTO {
 	private String temp_code;
 	private String c_code;
 	private String gender;
+	private int lev;
 	private MemberDTO lover;
 	private MemberConnectDTO connect;
 	
@@ -29,7 +30,14 @@ public class MemberDTO {
 				+ ", birth=" + birth + ", begin_date=" + begin_date + ", regdt=" + regdt + ", last_login=" + last_login
 				+ ", auth_key=" + auth_key + ", auth_status=" + auth_status + ", session_key=" + session_key
 				+ ", session_limit=" + session_limit + ", profile=" + profile + ", temp_code=" + temp_code + ", c_code="
-				+ c_code + ", gender=" + gender + ", lover=" + lover + ", connect=" + connect + "]";
+				+ c_code + ", gender=" + gender + ", lev=" + lev + ", lover=" + lover + ", connect=" + connect
+				+ "]";
+	}
+	public int getLev() {
+		return lev;
+	}
+	public void setLev(int lev) {
+		this.lev = lev;
 	}
 	public MemberConnectDTO getConnect() {
 		return connect;

@@ -4,16 +4,37 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public class Utility {
+	
+	public static long validDiffTime(String timestamp) {
+		long diffDays = 0;
 
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		Date d_limit = null;
+		Date now = null;
+		try {
+			d_limit = dateFormat.parse(timestamp);
+			now = new Date();
+			long diff = now.getTime() - d_limit.getTime();
+			diffDays = diff / (24 * 60 * 60 * 1000);
+		} catch (ParseException e) {e.printStackTrace();}
+		
+		return diffDays;
+	}
+	
+	
 	public static String saveFileSpring(MultipartFile multipartFile, String basePath) {
 		// input form's parameter name
 		String fileName = "";

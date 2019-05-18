@@ -1,6 +1,73 @@
 const contextPath = document.querySelector("#contextPathHolder").attributes["data-contextpath"].value;
 
 //===================================================================================
+//IE 호환문제 prepend, remove, before
+//-------------------------------------[use]-----------------------------------------
+(function (arr) {
+	  arr.forEach(function (item) {
+	    if (item.hasOwnProperty('prepend')) {
+	      return;
+	    }
+	    Object.defineProperty(item, 'prepend', {
+	      configurable: true,
+	      enumerable: true,
+	      writable: true,
+	      value: function prepend() {
+	        var argArr = Array.prototype.slice.call(arguments),
+	          docFrag = document.createDocumentFragment();
+	        
+	        argArr.forEach(function (argItem) {
+	          var isNode = argItem instanceof Node;
+	          docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+	        });
+	        
+	        this.insertBefore(docFrag, this.firstChild);
+	      }
+	    });
+	  });
+	})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
+(function (arr) {
+	  arr.forEach(function (item) {
+	    if (item.hasOwnProperty('remove')) {
+	      return;
+	    }
+	    Object.defineProperty(item, 'remove', {
+	      configurable: true,
+	      enumerable: true,
+	      writable: true,
+	      value: function remove() {
+	        this.parentNode.removeChild(this);
+	      }
+	    });
+	  });
+	})([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
+
+(function (arr) {
+	  arr.forEach(function (item) {
+	    if (item.hasOwnProperty('before')) {
+	      return;
+	    }
+	    Object.defineProperty(item, 'before', {
+	      configurable: true,
+	      enumerable: true,
+	      writable: true,
+	      value: function before() {
+	        var argArr = Array.prototype.slice.call(arguments),
+	          docFrag = document.createDocumentFragment();
+	        
+	        argArr.forEach(function (argItem) {
+	          var isNode = argItem instanceof Node;
+	          docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+	        });
+	        
+	        this.parentNode.insertBefore(docFrag, this);
+	      }
+	    });
+	  });
+	})([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
+	
+//===================================================================================
 //utils
 //-------------------------------------[use]-----------------------------------------
 //utils.alert(str, goUrl, addedBtn);
@@ -139,7 +206,35 @@ const utils = {
 	popupFormClose: function () {
 		const modal_form = document.querySelector(".modal-form-layout");
 		modal_form.remove();
+	},
+	popupFormInitHelp: function(){
+		const els = document.querySelectorAll(".modal-form-inner input");
+		Array.prototype.slice.call(els).forEach(function (el) {
+			el.parentNode.classList.remove("warning");
+			let helps = el.parentNode.querySelectorAll("span.help");
+			if (helps.length > 0) {
+				Array.prototype.slice.call(helps).forEach(function (help) {
+					help.remove();
+				});
+			}
+		});
+	},
+	popupFormCreateHelp: function(index, str){
+		const els = document.querySelectorAll(".modal-form-inner input");
+		let span = document.createElement("span");
+		span.classList.add("help");
+		span.innerText = str;
+		Array.prototype.slice.call(els).forEach(function (el, i) {
+			
+			if(i == index){
+				el.parentNode.classList.add("warning");
+				el.parentNode.getElementsByTagName("input")[0].before(span);
+				el.parentNode.getElementsByTagName("input")[0].focus();
+			}
+		});
 	}
+
+
 };
 
 //===================================================================================
@@ -148,3 +243,29 @@ const utils = {
 const isNumber = function(el){
 	el.value = el.value.replace(new RegExp('[^0-9]', 'gi'), "");
 }
+
+
+//===================================================================================
+//diffTime(endTime)
+//-----------------------------------------------------------------------------------
+const diffTime = function getTime(end) { 
+	const now = new Date(); 
+	const dday = new Date(end); 
+	
+	const days = (dday - now) / 1000 / 60 / 60 / 24; 
+	const daysRound = Math.floor(days); 
+	const hours = (dday - now) / 1000 / 60 / 60 - (24 * daysRound); 
+	const hoursRound = Math.floor(hours); 
+	const minutes = (dday - now) / 1000 /60 - (24 * 60 * daysRound) - (60 * hoursRound); 
+	const minutesRound = Math.floor(minutes); 
+	const seconds = (dday - now) / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound); 
+	const secondsRound = Math.round(seconds); 
+	
+	const diffDays = {};
+	diffDays['daysRound'] =  daysRound;
+	diffDays['hoursRound'] =  hoursRound;
+	diffDays['minutesRound'] =  minutesRound;
+	diffDays['secondsRound'] =  secondsRound;
+	
+	return diffDays;
+} 
