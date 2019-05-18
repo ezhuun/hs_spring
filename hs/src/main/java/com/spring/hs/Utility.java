@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class Utility {
 		// original file name
 		String originalFileName = multipartFile.getOriginalFilename();
 		// file content type
-		String contentType = multipartFile.getContentType();
+		//String contentType = multipartFile.getContentType();
 		// file size
 		long fileSize = multipartFile.getSize();
 

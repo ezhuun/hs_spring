@@ -1,10 +1,7 @@
-package com.spring.hs.service.member;
+package com.spring.hs.model.member;
 
 import java.util.Date;
 import java.util.Map;
-
-import com.spring.hs.dto.member.MemberConnectDTO;
-import com.spring.hs.dto.member.MemberDTO;
 
 public interface MemberService {
 	
@@ -28,7 +25,5 @@ public interface MemberService {
 	boolean createMember(Map<String, String> map);
 	Map<String, String> registerMember(String email, String passwd);
 	boolean duplicateEmail(String email);
-	
-	
 	
 }

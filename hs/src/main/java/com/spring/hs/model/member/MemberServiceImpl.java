@@ -1,7 +1,6 @@
-package com.spring.hs.service.member;
+package com.spring.hs.model.member;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,29 +16,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.hs.MailHandler;
 import com.spring.hs.Utility;
-import com.spring.hs.dao.member.MemberDAO;
-import com.spring.hs.dto.member.MemberConnectDTO;
-import com.spring.hs.dto.member.MemberDTO;
+import com.spring.hs.mapper.MemberMapperInter;
 
 @Service
 public class MemberServiceImpl implements MemberService{
 
 	@Autowired
-	private MemberDAO dao;
+	private MemberMapperInter mapper;
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	private JavaMailSender mailSender;
-	
 
+	@Transactional
 	@Override
 	public boolean deleteMember(String uuid) {
 		boolean flag = false;
 		MemberDTO dto = getMemberByUuid(uuid);
 		
 		try {
-			dao.deleteMember(dto.getUuid());
-			dao.deleteCode(dto.getTemp_code());
+			mapper.deleteMember(dto.getUuid());
+			mapper.deleteCode(dto.getTemp_code());
 			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -48,6 +45,7 @@ public class MemberServiceImpl implements MemberService{
 		return flag;
 	}
 
+	@Transactional
 	@Override
 	public boolean updateDisconnectStatus(String uuid, Date limit) {
 		boolean flag = false;
@@ -62,7 +60,7 @@ public class MemberServiceImpl implements MemberService{
 		
 			try {
 				//[MEMBER_CONNECT] disabled status 변경
-				dao.disconnectMemberConnect(map);
+				mapper.disconnectMemberConnect(map);
 		
 				//TEMP_CODE와 C_CODE를 비교한다..
 				//둘 중 누구의 코드로 연결되었는지 확인..
@@ -75,19 +73,19 @@ public class MemberServiceImpl implements MemberService{
 					MemberDTO _dto = getConnectedAccount(dto.getUuid());
 					if(_dto != null && _dto.getC_code() != null) {
 						//[MEMBER_CONNECT] U2 -> U1, U2 == NULL ...UPDATE
-						dao.changeMemberConnectUUID(dto.getC_code());
+						mapper.changeMemberConnectUUID(dto.getC_code());
 						//상대방의 기존 TEMP_CODE [MEMBER_CONNECT]는 삭제..
-						dao.deleteCode(_dto.getTemp_code());
+						mapper.deleteCode(_dto.getTemp_code());
 						//상대방의 [MEMBER] C_CODE -> TEMP_CODE로 변경
-						dao.tempCodeChange(_dto.getUuid());
+						mapper.tempCodeChange(_dto.getUuid());
 					}else {
 						//상대방이 연결을 먼저끊었다면..
 						//기존 code disabled
-						dao.disabledCode(dto.getC_code());
+						mapper.disabledCode(dto.getC_code());
 					}
 
 					//TEMP_CODE 다시 발급..
-					List<String> list = dao.getAllcode();
+					List<String> list = mapper.getAllcode();
 					String c_code = Utility.randomKey(list, 8);
 					
 					Map<String, String> _map = new HashMap<String, String>();
@@ -95,18 +93,18 @@ public class MemberServiceImpl implements MemberService{
 					_map.put("code", c_code);
 					
 					//[MEMBER_CONNECT] C_CODE 입력
-					dao.createMemberConnect(_map);
+					mapper.createMemberConnect(_map);
 					//[MEMBER] C_CODE 초기화, TEMP_CODE업데이트
-					dao.disconnectMember(_map);
+					mapper.disconnectMember(_map);
 				}else {
 					//같지 않다면
 					//상대방 코드로 연결되어있는 상태
 					
 					//MEMBER_CONNECT U2는 나자신이기 때문에 삭제
-					dao.deleteMemberConnectU2(dto.getC_code());
+					mapper.deleteMemberConnectU2(dto.getC_code());
 					//내 temp_code는 아직 사용하지 않았기 때문에
 					//code를 다시 발급받을 필요가 없다. 기존C_CODE만 초기화
-					dao.clearCcode(dto.getUuid());
+					mapper.clearCcode(dto.getUuid());
 				}
 				
 				flag = true;
@@ -120,36 +118,49 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public boolean changePasswd(String uuid, String passwd) {
+		boolean flag = false;
+		
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("uuid", uuid);
 		map.put("passwd", passwordEncoder.encode(passwd));
 		
-		return dao.changePasswd(map);
+		int cnt = mapper.changePasswd(map);
+		if(cnt>0) {
+			flag = true;
+		}
+		return flag;
 	}
 
 	@Override
 	public String getCcodebyUuid(String uuid) {
-		return dao.getCcodebyUuid(uuid);
+		return mapper.getCcodebyUuid(uuid);
 	}
 
 	@Override
 	public MemberDTO checkMemberWithSessionKey(String session_key) {
-		return dao.checkMemberWithSessionKey(session_key);
+		return mapper.checkMemberWithSessionKey(session_key);
 	}
 	
 	@Override
 	public boolean keepLogin(String uuid, String session_key, Date session_limit) {
-		return dao.keepLogin(uuid, session_key, session_limit);
+		boolean flag = false;
+		
+		int cnt = mapper.keepLogin(uuid, session_key, session_limit);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
 	}
 
 	@Override
 	public MemberDTO getConnectedAccount(String uuid) {
-		return dao.getConnectedAccount(uuid);
+		return mapper.getConnectedAccount(uuid);
 	}
 
 	@Override
 	public void lastLoginUpdate(String uuid) {
-		dao.lastLoginUpdate(uuid);
+		mapper.lastLoginUpdate(uuid);
 	}
 
 	@Override
@@ -159,27 +170,48 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Override
 	public boolean updateProfile(MemberDTO dto) {
-		return dao.updateProfile(dto);
+		boolean flag = false;
+		
+		int cnt = mapper.updateProfile(dto);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
 	}
 
 	@Override
 	public boolean updatePhoto(String uuid, String photo) {
-		return dao.updatePhoto(uuid, photo);
+		boolean flag = false;
+		
+		int cnt = mapper.updatePhoto(uuid, photo);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
 	}
 
 	@Override
 	public MemberDTO getMemberByEmail(String email) {
-		return dao.getMemberByEmail(email);
+		return mapper.getMemberByEmail(email);
 	}
 	
 	@Override
 	public MemberDTO getMemberByUuid(String uuid) {
-		return dao.getMemberByUuid(uuid);
+		return mapper.getMemberByUuid(uuid);
 	}
 	
 	@Override
 	public boolean validCode(String uuid) {
-		return dao.validCode(uuid);
+		boolean flag = false;
+		
+		int cnt = mapper.validCode(uuid);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
 	}
 
 	@Transactional
@@ -191,9 +223,12 @@ public class MemberServiceImpl implements MemberService{
 		map.put("uuid", uuid);
 		map.put("code", code);
 		
-		flag = dao.updateMemberConnectCode(map);
-		if(flag == true) {
-			flag = dao.updateMemberCode(map);
+		int cnt = mapper.updateMemberConnectCode(map);
+		if(cnt > 0) {
+			cnt = mapper.updateMemberCode(map);
+			if(cnt > 0) {
+				flag = true;
+			}
 		}
 		
 		return flag;
@@ -201,7 +236,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public MemberConnectDTO getCode(String code) {
-		return dao.getCode(code);
+		return mapper.getCode(code);
 	}
 	
 	@Override
@@ -245,9 +280,13 @@ public class MemberServiceImpl implements MemberService{
 	public boolean createMember(Map<String, String> map) {
 		boolean flag = false;
 		
-		flag = dao.createMemberConnect(map);
-		if(flag == true) {
-			flag = dao.createMember(map);
+		
+		int cnt = mapper.createMemberConnect(map);
+		if(cnt > 0) {
+			cnt = mapper.createMember(map);
+			if(cnt > 0) {
+				flag = true;
+			}
 		}
 		
 		return flag;
@@ -257,7 +296,7 @@ public class MemberServiceImpl implements MemberService{
 	public Map<String, String> registerMember(String email, String passwd) {
 		boolean flag = false;
 		
-		List<String> list = dao.getAllcode();
+		List<String> list = mapper.getAllcode();
 		String code = Utility.randomKey(list, 8);
 		String uuid = Utility.getUuid();
 		
@@ -278,7 +317,14 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public boolean duplicateEmail(String email) {
-		return dao.duplicateEmail(email);
+		boolean flag = false;
+		
+		int cnt = mapper.duplicateEmail(email);
+		if(cnt > 0) {
+			flag = true;
+		}
+		
+		return flag;
 	}
 	
 }

@@ -1,4 +1,4 @@
-package com.spring.hs.dto.member;
+package com.spring.hs.model.member;
 
 public class MemberDTO {
 

@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.WebUtils;
 
-import com.spring.hs.dto.member.MemberDTO;
-import com.spring.hs.service.member.MemberService;
+import com.spring.hs.model.member.MemberDTO;
+import com.spring.hs.model.member.MemberService;
 
 public class AutoLoginInterceptor extends HandlerInterceptorAdapter {
 	

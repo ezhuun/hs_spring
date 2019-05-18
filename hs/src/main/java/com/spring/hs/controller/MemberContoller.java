@@ -1,4 +1,4 @@
-package com.spring.hs.controller.member;
+package com.spring.hs.controller;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,14 +22,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.WebUtils;
 
 import com.spring.hs.Utility;
-import com.spring.hs.dto.member.MemberConnectDTO;
-import com.spring.hs.dto.member.MemberDTO;
-import com.spring.hs.service.member.MemberService;
+import com.spring.hs.model.member.MemberConnectDTO;
+import com.spring.hs.model.member.MemberDTO;
+import com.spring.hs.model.member.MemberService;
 
 @Controller
 public class MemberContoller {
 
-	private static final Logger logger = LoggerFactory.getLogger(MemberContoller.class);
+	//private static final Logger logger = LoggerFactory.getLogger(MemberContoller.class);
 	
 	@Autowired
 	private MemberService service;
@@ -39,11 +37,7 @@ public class MemberContoller {
 	//세션기간 설정
 	private int amount = (60 * 60 * 24) * 3;
 	//private int amount = 10;
-	
-	
-	public void MemberContorller() {
-		System.out.println(service);
-	}
+
 	
 	@ResponseBody
 	@PostMapping("/deleteMember")
@@ -72,7 +66,6 @@ public class MemberContoller {
 	
 	public MemberContoller() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@PostMapping("/disconnect")
@@ -316,6 +309,7 @@ public class MemberContoller {
 			@RequestParam String uuid) throws Exception{
 		String result = "0";
 		
+		@SuppressWarnings("deprecation")
 		String basePath = request.getRealPath("/resources/upload/profile");
 		if(file.getContentType().indexOf("image") >= 0) {
 			String fileName = Utility.saveFileSpring(file, basePath);
@@ -430,6 +424,7 @@ public class MemberContoller {
 				map.put("msg", "회원가입 성공");
 			}else {
 				//회원가입 실패
+				map = new HashMap<String, String>();
 				map.put("result", "2");
 				map.put("msg", "회원가입 실패");
 			}
