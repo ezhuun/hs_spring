@@ -381,7 +381,7 @@ public class MemberContoller {
 	@PostMapping("/sendEmail")
 	public String sendEmail(String email, String code) {
 		String title = "[하트시그널] 상대방에게서 초대코드가 도착했습니다";
-		String message = "하트시그널로 당신을 초대합니다.<br/>당신의 친구에게서 하트시그널 초대장이 도착했습니다."
+		String message = "하트시그널로 당신을 초대합니다.<br/>당신의 친구에게서 하트시그널 초대장이 도착했습니다.<br/>"
 				+ "상대방과의 계정연결을 원하실 경우 아래 초대코드를 홈페이지 가입 후 입력해주세요"
 				+ "<h3>" + code + "</h3>";
 		String btnStr = "홈페이지 바로가기";
@@ -446,6 +446,11 @@ public class MemberContoller {
 	@GetMapping("/main")
 	public String main() {
 		return "index";
+	}
+
+	@GetMapping("/accountSetting")
+	public String accountSetting() {
+		return "auth/accountSetting";
 	}
 	
 }

@@ -20,11 +20,11 @@ public interface MemberMapperInter {
 	int changePasswd(Map<String, String> map);
 	String getCcodebyUuid(String uuid);
 	MemberDTO checkMemberWithSessionKey(String session_key);
-	int keepLogin(String uuid, String session_key, Date session_limit);
+	int keepLogin(Map<String, Object> map);
 	MemberDTO getConnectedAccount(String uuid);
 	int lastLoginUpdate(String uuid);
 	int updateProfile(MemberDTO dto);
-	int updatePhoto(String uuid, String photo);
+	int updatePhoto(Map<String, String> map);
 	MemberDTO getMemberByUuid(String uuid);
 	MemberDTO getMemberByEmail(String email);
 	int validCode(String uuid);

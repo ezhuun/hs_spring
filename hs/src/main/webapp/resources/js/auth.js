@@ -291,36 +291,37 @@ const handleClickRegister = function () {
 //----------------------------------------------
 //setinteval을 이용하여 주기적으로 db점검필요.. 상대방이 연결했다면 다음페이지로 이동시키기 위함..
 //일단 2초에 한번씩 검사하는걸로..
-const uuid = document.querySelector("#uuid").value.trim();
-setInterval(function () {
-	$.ajax({
-		url: contextPath + "/getCode",
-		method: "post",
-		type: "json",
-		data: {
-			uuid: uuid
-		},
-		success: function (data) {
-			if (data.trim().length > 0) {
-				let form = document.createElement("form");
-				form.setAttribute("style", "display:none");
-				form.setAttribute("charset", "UTF-8");
-				form.setAttribute("method", "post");
-				form.setAttribute("action", contextPath + "/profile");
-
-				let hiddenField = document.createElement("input");
-				hiddenField.setAttribute("type", "hidden");
-				hiddenField.setAttribute("name", "uuid");
-				hiddenField.setAttribute("value", uuid);
-				form.appendChild(hiddenField);
-
-				document.body.appendChild(form);
-				form.submit();
+if(location.href.indexOf("/connect") > 0){
+	const uuid = document.querySelector("#uuid").value.trim();
+	setInterval(function () {
+		$.ajax({
+			url: contextPath + "/getCode",
+			method: "post",
+			type: "json",
+			data: {
+				uuid: uuid
+			},
+			success: function (data) {
+				if (data.trim().length > 0) {
+					let form = document.createElement("form");
+					form.setAttribute("style", "display:none");
+					form.setAttribute("charset", "UTF-8");
+					form.setAttribute("method", "post");
+					form.setAttribute("action", contextPath + "/profile");
+	
+					let hiddenField = document.createElement("input");
+					hiddenField.setAttribute("type", "hidden");
+					hiddenField.setAttribute("name", "uuid");
+					hiddenField.setAttribute("value", uuid);
+					form.appendChild(hiddenField);
+	
+					document.body.appendChild(form);
+					form.submit();
+				}
 			}
-		}
-	});
-}, 2000);
-
+		});
+	}, 2000);
+}
 const handleClickConnect = function () {
 	initHelp();
 	const uuid = document.querySelector("#uuid").value.trim();
