@@ -144,14 +144,16 @@
 }
 
 .register-step .step {
-	position: relative;
-	border: 2px solid;
-	border-radius: 100%;
-	width: 1.5rem;
-	height: 1.5rem;
-	font-size: 1rem;
-	color: #777;
-	border-color: #777;
+    position: relative;
+    border: 2px solid;
+    border-radius: 100%;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.875rem;
+    color: #777;
+    border-color: #777;
+    box-sizing: border-box;
+    padding-top: 2px;
 }
 
 .register-step .step:not(:first-child) {

@@ -26,9 +26,7 @@
 	<meta name="msapplication-TileImage" content="${pageContext.request.contextPath}/favicon/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
 	
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR" >
-	<link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto'>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" >
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/libs/bootstrap/bootstrap.iso.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/libs/fontawesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/libs/material-datetime-picker/material-datetime-picker.css">
