@@ -34,19 +34,16 @@
 	
 	<script src="${pageContext.request.contextPath}/libs/jquery/jquery-1.9.1.min.js"></script>
 	<script src="${pageContext.request.contextPath}/libs/bootstrap/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 	<script src="https://unpkg.com/babel-polyfill@6.2.0/dist/polyfill.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/rome/2.1.22/rome.standalone.js"></script>
 	<script src="${pageContext.request.contextPath}/libs/material-datetime-picker/material-datetime-picker.js" charset="utf-8"></script>
- 
+	
  
  
  
 	<style>
-		@media (max-width: 992px){
-			.posts{width: 45% !important;}
-			.posts:nth-child(n+3){margin-top: 2.5rem !important;}
-		}
 		@media (max-width: 768px){
 			.header-top{
 				display: none !important;
@@ -80,6 +77,8 @@
 			.m-header{
 				display: flex !important;
 			}
+			
+			.today-pick-box{flex-direction: column !important;}
 		}
 	
 		.wrap{position:relative; box-sizing: border-box; display:flex; justify-content: flex-start; flex-direction: column;}
@@ -114,13 +113,12 @@
     	ul.nav-menu li ul li{float: left; color:#333; font-size: 0.785rem; box-sizing:border-box; width:100%; padding: 0.425rem 0.125rem; cursor:pointer;}
     	ul.nav-menu li ul li::after{content:''; position:absolute; bottom:0; left:0; width:0; height:0.125rem; background-color:#efefef; transition: all 0.3s ease-in;}
     	ul.nav-menu li ul li:hover::after{width:100%;}
-    	
-    	.banner-overlay{position:absolute; width:100%; height:37.5rem;}
-    	.banner-overlay::after{content:''; position:absolute; top:0; left:0; width:100%; height:100%;
+
+    	.banner-overlay::after{content:''; position:absolute; top:0; left:0; width:100%; height:37.5rem;
     	background:url('${pageContext.request.contextPath}/images/loginbg.png');
-    	background-size: 75% 100%;}
-		.postbox{padding: 0 0.5rem; position:relative; margin:1rem 0;}
-		.posts{vertical-align: top; box-sizing: border-box; display: inline-flex; width:23%; flex-direction: column; height:16.5rem !important; padding:1rem 1rem 2rem; flex:1; height:100%; transform: rotate(-3deg); background:rgba(255,255,255,0.7); box-shadow: 0px 4px 15px 1px rgba(0, 0, 0, 0.2);}
+    	background-size: 75% 100%; z-index:-1;}
+		.postbox{padding: 0 0.5rem; display:flex; justify-content:center; flex-direction:row; margin:2rem 0;}
+		.posts{vertical-align: top; box-sizing: border-box; display: inline-flex; flex-direction: column; height:16.5rem !important; padding:1rem 1rem 2rem; flex:1; height:100%; transform: rotate(-3deg); background:rgba(255,255,255,0.7); box-shadow: 0px 4px 15px 1px rgba(0, 0, 0, 0.2);}
 		.posts+.posts{margin-left:1rem;}
 		
 		.posts:nth-child(1n){transform: rotate(3deg);}
@@ -242,6 +240,25 @@ display: none;
 			border-bottom: none;
 		}
 		    
+		    
+		.today-pick-box{
+		    display: flex;
+		    flex-direction: row;
+		    justify-content: center;
+		    align-items: center;
+		    height: 17rem;‬
+		}
+		
+		ul.today-pick-slider{list-style: none; margin:0; padding:0;}
+		.today-pick-card{width:374px; height:10.775rem;}
+		.pick-card-container{background: #fff; height: 100%; border-radius:3px; box-sizing: border-box; overflow: hidden;}
+		
+		
+		.board-list-box{margin-top: 1rem;}
+		
+		
+
+		
 	</style>
 </head>
 <body>
@@ -329,8 +346,7 @@ display: none;
 		</div>
 		
  
-		<div class="content">
-			<div class="banner-overlay"></div>
+		<div class="content banner-overlay">
 			<div class="container-inner">
 				<div class="postbox">
 					<div class="posts">
@@ -361,9 +377,31 @@ display: none;
 					</div>
 				</div>
 				
-				<div>여기 어때요?</div>
+				<div class="today-pick-box">
+					<ul class="today-pick-slider">
+						<li>
+							<div class="today-pick-card">
+								<div class="pick-card-container">1</div>
+							</div>
+						</li>
+						<li>
+							<div class="today-pick-card">
+								<div class="pick-card-container">1</div>
+							</div>
+						</li>
+						<li>
+							<div class="today-pick-card">
+								<div class="pick-card-container">1</div>
+							</div>
+						</li>
+					</ul>
+				</div>
 				
-				<div>익명게시판 목록 & D-day</div>
+				
+				<div class="board-list-box">
+					<span class="h2">Board List</span>
+					<span class="headerLine">+</span>
+				</div>
 			</div>
 		</div>
 		<div class="bottom">
@@ -371,7 +409,7 @@ display: none;
 		</div>
 	</div>
 	
- 
+
  
  
  
@@ -384,22 +422,118 @@ display: none;
  
  
 	<script src="${pageContext.request.contextPath}/js/utils.js" charset="utf-8"></script>
-	<script src="${pageContext.request.contextPath}/js/main.js" charset="utf-8"></script>
+	<script src="${pageContext.request.contextPath}/js/common.js" charset="utf-8"></script>
 	<script>
-	const handleClickToggleClose = function(){
-		const left = document.querySelector(".left-menu-container");
-		left.style.left = "-16.25rem";
+
+	//slider script config
+	let slider;
+	if(document.body.scrollWidth < 768){
+		slider =$('.today-pick-slider').bxSlider({
+			auto: true,
+			slideWidth: 374,
+			minSlides: 1,
+			maxSlides: 1,
+			moveSlides: 1,
+			slideMargin: 50,
+			pager:false,
+			controls: false,
+		});
+	}else{
+		slider =$('.today-pick-slider').bxSlider({
+			auto: true,
+			slideWidth: 374,
+			minSlides: 3,
+			maxSlides: 3,
+			moveSlides: 1,
+			slideMargin: 50,
+			pager:false,
+			controls: false,
+		});
 	}
-	const handleClickToggleOpen = function(){
-		const left = document.querySelector(".left-menu-container");
-		left.style.left = "0";
-	}
+
 	
-	
-	var mql = window.matchMedia("screen and (max-width: 768px)");
-	mql.addListener(function(e) {
-		handleClickToggleClose();
+	let media = window.matchMedia("screen and (max-width: 768px)");
+	media.addListener(function(e) {
+		if(e.matches){
+			slider.reloadSlider({
+				auto: true,
+				slideWidth: 374,
+				minSlides: 1,
+				maxSlides: 1,
+				moveSlides: 1,
+				slideMargin: 50,
+				pager:false,
+				controls: false,
+			});
+		}else{
+			slider.reloadSlider({
+				auto: true,
+				slideWidth: 374,
+				minSlides: 3,
+				maxSlides: 3,
+				moveSlides: 1,
+				slideMargin: 50,
+				pager:false,
+				controls: false,
+			});
+		}
 	});
+
+	
+	//api 호출
+	const apiCall = async function(lati, longi) {
+		let code = "locationBasedList";
+		let api_uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/"+code+"?ServiceKey=0165%2B411e%2FgQnKNGRQg%2BLDx3RvUEyydBouP2dSw1kt7oznhaPXAx6SEXBjjZSnXlWWw8rdxjb8pW%2BhIws3LOiQ%3D%3D&_type=json&MobileOS=ETC&MobileApp=AppTest";
+		api_uri = api_uri + "&listYN=Y";
+		api_uri = api_uri + "&arrange=B";
+		api_uri = api_uri + "&contentTypeId=25";
+		api_uri = api_uri + "&mapY=" + lati;
+		api_uri = api_uri + "&mapX=" + longi;
+		api_uri = api_uri + "&radius=2000";
+		api_uri = api_uri + "&numOfRows=30";
+		api_uri = api_uri + "&pageNo=1";
+		
+		console.log(api_uri);
+		
+		var arr;
+		await $.get(api_uri, function(data){
+			arr = data.response.body.items.item;
+		});
+		
+		if(!arr){
+			apiCall(37.568477, 126.981611);
+			return;
+		}
+      	for(let i=arr.length-1; i>0; i--){
+            let j = Math.floor(Math.random() * (i+1));
+            let temp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = temp;
+        }
+      	console.log(arr);
+		var html="";
+		arr.forEach(function(item, i){
+			html += "<li>";
+			html += "<div class='today-pick-card'>";
+			html += "<div class='pick-card-container'>";
+			html += "<img src='"+item.firstimage2+"' width='150'>";
+			html += "<p>"+item.title+"</p>";
+			html += "</div>";
+			html += "</div>";
+			html += "</li>";
+		});
+		document.querySelector(".today-pick-slider").innerHTML = html;
+		slider.reloadSlider();
+	}
+	apiCall(37.568477, 126.981611);
+	
+	
+	if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(function(position) {
+		  apiCall(position.coords.latitude, position.coords.longitude);
+	  });
+	}
+	
 	</script>
 </body>
 </html>

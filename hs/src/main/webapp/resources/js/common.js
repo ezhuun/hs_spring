@@ -57,3 +57,17 @@ if (connectLimit != "") {
 	}, 1000);
 }
 
+
+//모바일화면(width>768) toggle menu 
+const handleClickToggleClose = function(){
+	const left = document.querySelector(".left-menu-container");
+	left.style.left = "-16.25rem";
+}
+const handleClickToggleOpen = function(){
+	const left = document.querySelector(".left-menu-container");
+	left.style.left = "0";
+}
+let mql = window.matchMedia("screen and (max-width: 768px)");
+mql.addListener(function(e) {
+	handleClickToggleClose();
+});
