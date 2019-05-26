@@ -250,8 +250,8 @@ display: none;
 		}
 		
 		ul.today-pick-slider{list-style: none; margin:0; padding:0;}
-		.today-pick-card{width:374px; height:10.775rem;}
-		.pick-card-container{background: #fff; height: 100%; border-radius:3px; box-sizing: border-box; overflow: hidden;}
+		.today-pick-card{height:10.775rem;}
+		.pick-card-container{border:1px solid #999; background: #eee; height: 99%; border-radius:3px; box-sizing: border-box; overflow: hidden;}
 		
 		
 		.board-list-box{margin-top: 1rem;}
@@ -347,7 +347,11 @@ display: none;
 		
  
 		<div class="content banner-overlay">
-			<div class="container-inner">
+			<div class="container-inner sideBorder">
+			
+				<div style="height:550px;">d-day & checklist</div>
+
+
 				<div class="postbox">
 					<div class="posts">
 						<div class="post-photo">
@@ -377,35 +381,29 @@ display: none;
 					</div>
 				</div>
 				
+				<br/>
+				<span class="h2">오늘 여기 어때요?</span>
+				<span class="headerLine">+</span>
 				<div class="today-pick-box">
 					<ul class="today-pick-slider">
-						<li>
-							<div class="today-pick-card">
-								<div class="pick-card-container">1</div>
-							</div>
-						</li>
-						<li>
-							<div class="today-pick-card">
-								<div class="pick-card-container">1</div>
-							</div>
-						</li>
-						<li>
-							<div class="today-pick-card">
-								<div class="pick-card-container">1</div>
-							</div>
-						</li>
+<!-- 						<li> -->
+<!-- 							<div class="today-pick-card"> -->
+<!-- 								<div class="pick-card-container">1</div> -->
+<!-- 							</div> -->
+<!-- 						</li> -->
 					</ul>
 				</div>
 				
 				
+				<span class="h2">익명게시판 둘러보기</span>
+				<span class="headerLine">+</span>
 				<div class="board-list-box">
-					<span class="h2">Board List</span>
-					<span class="headerLine">+</span>
+					게시판 목록..
 				</div>
 			</div>
 		</div>
 		<div class="bottom">
-			<div class="container-inner"></div>
+			<div class="container-inner">http://unitegallery.net/</div>
 		</div>
 	</div>
 	
@@ -510,7 +508,7 @@ display: none;
             arr[i] = arr[j];
             arr[j] = temp;
         }
-      	console.log(arr);
+      	
 		var html="";
 		arr.forEach(function(item, i){
 			html += "<li>";
