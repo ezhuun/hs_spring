@@ -62,8 +62,6 @@
 			    justify-content: center !important;
 			    flex-direction: column !important;
 			    height: auto !important;
-			    background: linear-gradient(rgba(230,100,101,1), rgba(145,152,229,1)) !important;
-			    box-shadow: inset 0px -55px 75px 97px #fff !important;
 			}
 			.posts{
 				background: rgba(255,255,255,1) !important;
@@ -116,7 +114,9 @@
 
     	.banner-overlay::after{content:''; position:absolute; top:0; left:0; width:100%; height:37.5rem;
     	background:url('${pageContext.request.contextPath}/images/loginbg.png');
-    	background-size: 75% 100%; z-index:-1;}
+    	background-size: 75% 100%; z-index:-1;
+    	box-shadow: inset 0 -87px 45px -36px #fff;
+    	}
 		.postbox{padding: 0 0.5rem; display:flex; justify-content:center; flex-direction:row; margin:2rem 0;}
 		.posts{vertical-align: top; box-sizing: border-box; display: inline-flex; flex-direction: column; height:16.5rem !important; padding:1rem 1rem 2rem; flex:1; height:100%; transform: rotate(-3deg); background:rgba(255,255,255,0.7); box-shadow: 0px 4px 15px 1px rgba(0, 0, 0, 0.2);}
 		.posts+.posts{margin-left:1rem;}
@@ -257,7 +257,15 @@ display: none;
 		.board-list-box{margin-top: 1rem;}
 		
 		
-
+ .dday-checklist-box{height:500px; box-sizing: border-box; display: flex; justify-content: center;}
+ .dday-container{width:100%; display:flex; justify-content: center; align-items: center; flex-direction: column;}
+ .both-photo{display:flex; justify-content: center; align-items: center;}
+ .onesProfile{display: flex; flex-direction: column; justify-content: center; align-items: center;}
+ .onesProfile span{color:#fcf8e3; font-size: 0.875rem;}
+ .circle-photo{width:80px; height:80px; border-radius:100%; overflow:hidden;}
+ .circle-photo img{width:80px; height:80px;}
+ .days{font-size: 2rem;}
+ .dday-round{border:2px solid #e2dddd; color:#fff; border-radius:100%; margin-bottom:0.5rem; width:10rem; height:10rem; padding:1rem; display:flex; flex-direction: column; justify-content: center; align-items: center;}
 		
 	</style>
 </head>
@@ -345,11 +353,54 @@ display: none;
 			</div>
 		</div>
 		
- 
-		<div class="content banner-overlay">
+		<div class="content">
+			<div class="banner-overlay"></div>
 			<div class="container-inner sideBorder">
 			
-				<div style="height:550px;">d-day & checklist</div>
+				<div class="dday-checklist-box">
+				
+					<div class="dday-container">
+						<div class="dday-round">
+							<span>우리 벌써</span>
+							<span class="days">100</span>
+							<span>일째 사랑중♡</span>
+						</div>
+						
+						<div class="both-photo">
+							<div class="onesProfile">
+								<div class="circle-photo">
+									<img src="<c:if test='${not empty member.profile}'>${root}/upload/profile/${member.profile}</c:if>" onError="this.src='${root}/upload/profile/default.png'">
+								</div>
+								<span>
+									<c:choose>
+										<c:when test="${not empty member.name}">
+											${member.name}
+										</c:when>
+										<c:otherwise>미설정</c:otherwise>
+									</c:choose>
+								</span>
+							</div>
+							<span style="color:#ff8686; margin:0 1rem 1rem;">♥</span>
+							<div class="onesProfile">
+								<div class="circle-photo">
+									<img src="<c:if test='${not empty member.lover.profile}'>${root}/upload/profile/${member.lover.profile}</c:if>" onError="this.src='${root}/upload/profile/default.png'">
+								</div>
+								<span>
+									<c:choose>
+										<c:when test="${not empty member.lover.name}">
+											${member.lover.name}
+										</c:when>
+										<c:otherwise>미설정</c:otherwise>
+									</c:choose>
+								</span>
+							</div>
+						</div>
+					</div>
+					
+					
+					<div class="" style="width:100%;">checklist</div>
+				</div>
+
 
 
 				<div class="postbox">
@@ -367,7 +418,7 @@ display: none;
 					</div>
 					<div class="posts">
 						<div class="post-photo">
-							당신의 이야기를 작성하세요
+							당신의 이야기로 채워주세요
 						</div>
 						<div class="post-title"></div>
 					</div>
@@ -380,6 +431,7 @@ display: none;
 						</div>
 					</div>
 				</div>
+				
 				
 				<br/>
 				<span class="h2">오늘 여기 어때요?</span>
@@ -395,11 +447,13 @@ display: none;
 				</div>
 				
 				
+				
 				<span class="h2">익명게시판 둘러보기</span>
 				<span class="headerLine">+</span>
 				<div class="board-list-box">
 					게시판 목록..
 				</div>
+				
 			</div>
 		</div>
 		<div class="bottom">

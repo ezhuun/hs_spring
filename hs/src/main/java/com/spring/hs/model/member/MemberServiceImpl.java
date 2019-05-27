@@ -30,7 +30,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Transactional
 	@Override
-	public boolean deleteMember(String uuid) {
+	public boolean deleteMember(String uuid) throws Exception {
 		boolean flag = false;
 		MemberDTO dto = getMemberByUuid(uuid);
 		
@@ -47,7 +47,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Transactional
 	@Override
-	public boolean updateDisconnectStatus(String uuid, Date limit) {
+	public boolean updateDisconnectStatus(String uuid, Date limit) throws Exception {
 		boolean flag = false;
 		MemberDTO dto = getMemberByUuid(uuid);
 		
@@ -226,7 +226,7 @@ public class MemberServiceImpl implements MemberService{
 
 	@Transactional
 	@Override
-	public boolean resigerConnect(String uuid, String code) {
+	public boolean resigerConnect(String uuid, String code) throws Exception {
 		boolean flag = false;
 		
 		Map<String, String> map = new HashMap<String, String>();
@@ -283,7 +283,7 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Transactional
 	@Override
-	public boolean createMember(Map<String, String> map) {
+	public boolean createMember(Map<String, String> map) throws Exception {
 		boolean flag = false;
 		
 		
@@ -312,7 +312,10 @@ public class MemberServiceImpl implements MemberService{
 		map.put("code", code);
 		map.put("uuid", uuid);
 		
-		flag = createMember(map);
+		try {
+			flag = createMember(map);
+		} catch (Exception e) {}
+		
 		if(flag == true) {
 			map.remove("passwd");
 			return map;

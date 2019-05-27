@@ -49,11 +49,18 @@ public class MemberContoller {
 		boolean pflag = service.passwdCheck(passwd, dto.getPasswd());
 		if(pflag == true) {
 			//연결을 먼저 끊고..
+			boolean flag = false;
 			Date limit = new Date(System.currentTimeMillis() + (1000*amount));
-			service.updateDisconnectStatus(uuid, limit);
+			try {
+				boolean f = service.updateDisconnectStatus(uuid, limit);
+				if(f) {
+					//멤버레코드 삭제.. 또는 disabled처리
+					flag = service.deleteMember(uuid);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
-			//멤버레코드 삭제.. 또는 disabled처리
-			boolean flag = service.deleteMember(uuid);
 			if(flag) {
 				map.put("result", "1");
 			}else {
@@ -72,8 +79,11 @@ public class MemberContoller {
 	public String disconnect(String uuid) {
 		//[member_connect] 그대로유지 대신 limit기간설정과 d_status업데이트
 		//[member] c_code 초기화, temp_code다시 발급..
-		Date limit = new Date(System.currentTimeMillis() + (1000*amount));
-		service.updateDisconnectStatus(uuid, limit);
+		
+		try {
+			Date limit = new Date(System.currentTimeMillis() + (1000*amount));
+			service.updateDisconnectStatus(uuid, limit);
+		} catch (Exception e) {}
 		return "redirect:/logout";
 	}
 	
@@ -205,8 +215,12 @@ public class MemberContoller {
 							//만약 limit이 초과되었다면 계정연결해제를 한다
 							long diff = Utility.validDiffTime(cdto.getD_limit());
 							if(diff >= 0) {
-								Date limit = new Date(System.currentTimeMillis() + (1000*amount));
-								service.updateDisconnectStatus(dto.getUuid(), limit);
+								try {
+									Date limit = new Date(System.currentTimeMillis() + (1000*amount));
+									service.updateDisconnectStatus(dto.getUuid(), limit);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 								map.put("result", "5");
 								tflag = false;
 							}
@@ -358,7 +372,14 @@ public class MemberContoller {
 			}else {
 				boolean validCode = service.validCode(dto.getU1());
 				if(validCode == false && (dto.getU2() == null) ){
-					boolean flag = service.resigerConnect(uuid, code);
+					boolean flag = false;
+					
+					try {
+						flag = service.resigerConnect(uuid, code);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					
 					if(flag == true) {
 						map.put("result", "1");
 						map.put("msg", "연결성공");
