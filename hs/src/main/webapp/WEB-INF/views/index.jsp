@@ -570,7 +570,7 @@ display: none;
 			html += "<li>";
 			html += "<div class='today-pick-card'>";
 			html += "<div class='pick-card-container'>";
-			html += "<img src='"+item.firstimage2+"' width='150'>";
+			html += "<img src='"+item.firstimage2+"' width='200'>";
 			html += "<span>"+item.title+"</span>";
 			html += "</div>";
 			html += "</div>";
