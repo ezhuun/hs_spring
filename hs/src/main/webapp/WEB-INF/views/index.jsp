@@ -251,7 +251,9 @@ display: none;
 		
 		ul.today-pick-slider{list-style: none; margin:0; padding:0;}
 		.today-pick-card{height:10.775rem;}
-		.pick-card-container{border:1px solid #999; background: #eee; height: 99%; border-radius:3px; box-sizing: border-box; overflow: hidden;}
+		.pick-card-container{height: 99%; border-radius:3px; box-sizing: border-box; overflow: hidden;     display: flex;
+    flex-direction: column;
+    align-items: center;}
 		
 		
 		.board-list-box{margin-top: 1rem;}
@@ -569,7 +571,7 @@ display: none;
 			html += "<div class='today-pick-card'>";
 			html += "<div class='pick-card-container'>";
 			html += "<img src='"+item.firstimage2+"' width='150'>";
-			html += "<p>"+item.title+"</p>";
+			html += "<span>"+item.title+"</span>";
 			html += "</div>";
 			html += "</div>";
 			html += "</li>";
