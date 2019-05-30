@@ -57,7 +57,6 @@
 			.postbox{
 				display: flex !important;
 				margin: 0 !important;
-				padding: 2rem 0 !important;
 				align-items: center !important;
 			    justify-content: center !important;
 			    flex-direction: column !important;
@@ -67,22 +66,40 @@
 				background: rgba(255,255,255,1) !important;
 			    width: 75% !important;
 			    height: 16.5rem !important;
+			    transform: none !important;
 			}
 			.posts+.posts{
-				margin-top: 2rem;
+				margin-top: 2rem !important;
 			}
-			
+			.posts::after{all: unset !important;}
 			.m-header{
 				display: flex !important;
 			}
 			
 			.today-pick-box{flex-direction: column !important;}
+			
+			.dday-box{height: 400px !important;}
+			.dday-container{align-items: center !important; margin-right:0 !important}
+			.dday-round{color:#999 !important;}
+			.onesProfile span{color:#999 !important;}
+			
+			.board-list-box{flex-direction: column-reverse !important;}
+			.tb-container{margin-bottom: 1rem !important;}
+			.tb-container+div{margin-left:0 !important;}
+			
 		}
 	
 		.wrap{position:relative; box-sizing: border-box; display:flex; justify-content: flex-start; flex-direction: column;}
-		.header-wrap {background:#7b85a0; width:100%; height:100%; border-bottom:1px solid #b7b2b2;}
+		.header-wrap {background:#7b85a0; width:100%; height:100%; border-bottom:1px solid #b7b2b2; top: 0; z-index: 2;}
 		.wrap .header-top, .wrap .header, .wrap .content, .wrap .bottom{position:relative; display:flex; flex-direction:row; justify-content: center;  flexbox-sizing: border-box; -webkit-transition: all 300ms linear; -moz-transition: all 300ms linear; -o-transition: all 300ms linear; -ms-transition: all 300ms linear; transition: all 300ms linear;}
-		.wrap .header-top{background:rgba(0,0,0,0.3);}
+		.wrap .header-top{background: rgb(123, 133, 160, 0.8);}
+		.wrap .content{min-height: 622px;}
+		.wrap .bottom{margin-top:2rem;
+color: #7B8899;
+    background-color: #39414D;
+    padding: 2rem 0;
+    font-size: 0.875rem;
+		}
 		.container-inner{position:relative; width:1170px;}
 		
 		
@@ -114,16 +131,13 @@
 
     	.banner-overlay::after{content:''; position:absolute; top:0; left:0; width:100%; height:37.5rem;
     	background:url('${pageContext.request.contextPath}/images/loginbg.png');
-    	background-size: 75% 100%; z-index:-1;
+    	background-size: 65% 100%; z-index:-1;
     	box-shadow: inset 0 -87px 45px -36px #fff;
     	}
 		.postbox{padding: 0 0.5rem; display:flex; justify-content:center; flex-direction:row; margin:2rem 0;}
 		.posts{vertical-align: top; box-sizing: border-box; display: inline-flex; flex-direction: column; height:16.5rem !important; padding:1rem 1rem 2rem; flex:1; height:100%; transform: rotate(-3deg); background:rgba(255,255,255,0.7); box-shadow: 0px 4px 15px 1px rgba(0, 0, 0, 0.2);}
 		.posts+.posts{margin-left:1rem;}
-		
-		.posts:nth-child(1n){transform: rotate(3deg);}
-		.posts:nth-child(2n){transform: rotate(0deg);}
-		.posts:nth-child(3n){transform: rotate(-3deg);}
+
 		.posts::after{content:' '; position:absolute; top:-1rem; left:45%; height:2rem; border:0.375rem solid; border-color: rgba(115, 105, 105,.7);}
 		.post-photo{width:100%; height:100%; box-shadow: 0px 7px 28px -8px rgba(0, 0, 0, 0.2); display:flex; justify-content: center; align-items:center; font-size:0.825rem;}
 		.post-photo img{
@@ -154,7 +168,7 @@ display: none;
 		    left: -16.25rem;
 		    top: 0;
 		    height: 100%;
-		    z-index: 2;
+		    z-index: 10;
 		    background: rgba(255,255,255,2);
 		    box-sizing: border-box;
 		    border-right: 1px solid #E5E5E5;
@@ -246,21 +260,39 @@ display: none;
 		    flex-direction: row;
 		    justify-content: center;
 		    align-items: center;
-		    height: 17rem;‬
+		    height: 17rem;
+		    border-bottom: 1px solid #efefef;‬
 		}
 		
 		ul.today-pick-slider{list-style: none; margin:0; padding:0;}
 		.today-pick-card{height:10.775rem;}
-		.pick-card-container{height: 99%; border-radius:3px; box-sizing: border-box; overflow: hidden;     display: flex;
+		.pick-card-container{height: 99%; border-radius:3px; box-sizing: border-box; overflow: hidden; display: flex;
     flex-direction: column;
-    align-items: center;}
+    align-items: center;
+    border:1px dotted #777;
+    padding: 0.5rem 0.5rem 0;
+    cursor:pointer;
+    background: #f5f5f5;
+    }
+    .pick-card-container span{font-size: 0.8125rem; margin-top: 0.1875rem;}
+	.pick-card-container .pick-img{width:12.5rem; height:8.3125rem; overflow:hidden;}
+	.pick-card-container .pick-img img{width:100%; height:100%; border-radius: 3px;}
+	.pick-card-container:hover .pick-img img{
+            -webkit-transform:scale(1.1);
+            -moz-transform:scale(1.1);
+            -o-transform:scale(1.1);
+            transform:scale(1.1);
+            transition: transform .5s ease-in;
+            -o-transition: transform .5s ease-in;
+            -moz-transition: transform .5s ease-in;
+            -webkit-transition: transform .5s ease-in;
+	}
 		
 		
-		.board-list-box{margin-top: 1rem;}
 		
 		
- .dday-checklist-box{height:500px; box-sizing: border-box; display: flex; justify-content: center;}
- .dday-container{width:100%; display:flex; justify-content: center; align-items: center; flex-direction: column;}
+ .dday-box{height:500px; box-sizing: border-box; display: flex; justify-content: center;}
+ .dday-container{width:100%; display:flex; justify-content: center; align-items: flex-end; flex-direction: column; margin-right: 13rem;}
  .both-photo{display:flex; justify-content: center; align-items: center;}
  .onesProfile{display: flex; flex-direction: column; justify-content: center; align-items: center;}
  .onesProfile span{color:#fcf8e3; font-size: 0.875rem;}
@@ -268,7 +300,30 @@ display: none;
  .circle-photo img{width:80px; height:80px;}
  .days{font-size: 2rem;}
  .dday-round{border:2px solid #e2dddd; color:#fff; border-radius:100%; margin-bottom:0.5rem; width:10rem; height:10rem; padding:1rem; display:flex; flex-direction: column; justify-content: center; align-items: center;}
-		
+
+
+.board-list-box{margin-top: 2rem; display: flex; justify-content: center;}
+.tb-container{flex:1;
+    max-height: 175px;
+    overflow: hidden;
+}
+.tb-container+div{margin-left:4rem;}
+.tb-container img{width:100%; height:100%;}
+.tb-top{position:relative;}
+.tb-title{font-weight:600;}
+.more-btn{font-size: 0.875rem; float:right; color:#999; cursor:pointer;}
+.tb-body{margin-top:0.125rem;}
+.tb-body table{border-collapse: collapse; width:100%;}
+.tb-body table tr td:first-child{width:100%;}
+.tb-body table tr td:first-child::before{
+content: '\2022';
+    position: relative;
+    margin-right: 0.5rem;
+    color: #aaa;
+    font-size: 0.875rem;
+}
+.tb-body table tr td:last-child{font-size:0.625rem; color:#aaa;}
+.title-line-b{margin: 20px 0; width: 50px; height: 1px; background-color: #999;}
 	</style>
 </head>
 <body>
@@ -307,6 +362,15 @@ display: none;
 			</div>
 		</div>
 		
+
+		<div class="header-top">
+			<div class="container-inner">
+				<ul class="login-menu">
+					<li><a href="${pageContext.request.contextPath}/logout"><span class="fa fa-heartbeat"></span> 로그아웃</a></li>
+					<li><a href="${pageContext.request.contextPath}/accountSetting"><span class="fa fa-cog"></span> 개인설정</a></li>
+				</ul>
+			</div>
+		</div>
 		
 		<div class="header-wrap">
 			<div class="m-header">
@@ -314,14 +378,7 @@ display: none;
 				<div class="section-logo"><img src="${pageContext.request.contextPath}/images/h_logo_bk.png" /></div>
 			</div>
 		
-			<div class="header-top">
-				<div class="container-inner">
-					<ul class="login-menu">
-						<li><a href="${pageContext.request.contextPath}/logout"><span class="fa fa-heartbeat"></span> 로그아웃</a></li>
-						<li><a href="${pageContext.request.contextPath}/accountSetting"><span class="fa fa-cog"></span> 개인설정</a></li>
-					</ul>
-				</div>
-			</div>
+
 			<div class="header">
 				<div class="container-inner">
 	
@@ -359,7 +416,7 @@ display: none;
 			<div class="banner-overlay"></div>
 			<div class="container-inner sideBorder">
 			
-				<div class="dday-checklist-box">
+				<div class="dday-box">
 				
 					<div class="dday-container">
 						<div class="dday-round">
@@ -400,7 +457,6 @@ display: none;
 					</div>
 					
 					
-					<div class="" style="width:100%;">checklist</div>
 				</div>
 
 
@@ -435,6 +491,75 @@ display: none;
 				</div>
 				
 				
+
+				
+				<br/>
+				<span class="h2">친구에게도 하기 힘든말</span>
+				<span class="headerLine">+</span>
+				<div class="board-list-box">
+
+					<div class="tb-container">
+						<div class="tb-top">
+							<span class="tb-title">오늘의 고민</span>
+							<span class="more-btn">+ 더보기</span>
+						</div>
+						<div class="title-line-b"></div>
+						<div class="tb-body">
+							<table>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+					<div class="tb-container">
+						<div class="tb-top">
+							<span class="tb-title">추천 고민</span>
+							<span class="more-btn">+ 더보기</span>
+						</div>
+						<div class="title-line-b"></div>
+						<div class="tb-body">
+							<table>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+								<tr>
+									<td>어려워요</td>
+									<td>2019.01.01</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					
+					<div class="tb-container">
+						<img src="${root}/images/banner/banner_date_trouble.png" />
+					</div>
+
+				</div>
+				
 				<br/>
 				<span class="h2">오늘 여기 어때요?</span>
 				<span class="headerLine">+</span>
@@ -447,19 +572,13 @@ display: none;
 <!-- 						</li> -->
 					</ul>
 				</div>
-				
-				
-				
-				<span class="h2">익명게시판 둘러보기</span>
-				<span class="headerLine">+</span>
-				<div class="board-list-box">
-					게시판 목록..
-				</div>
-				
 			</div>
+			
+			
+			
 		</div>
 		<div class="bottom">
-			<div class="container-inner">http://unitegallery.net/</div>
+			Copyright © 2019 heartsignal All Rights Reserved.
 		</div>
 	</div>
 	
@@ -479,6 +598,37 @@ display: none;
 	<script src="${pageContext.request.contextPath}/js/common.js" charset="utf-8"></script>
 	<script>
 
+	function debounce(fn, delay){
+		var timer = null;
+		return function(){
+			clearTimeout(timer);
+			timer = setTimeout(function(){
+				fn.apply();
+			}, delay);
+		};
+	}
+	
+	//scroll header
+	document.addEventListener('scroll', debounce(headerScrolling, 10));
+	function headerScrolling(){
+		const header = document.querySelector(".header-wrap");
+		
+		if(document.body.scrollWidth < 768){
+			//모바일 사이즈일 경우 header 스크롤링하지 않는다.
+		}else{
+			if(header){
+				var scrollpos = window.scrollY || window.pageYOffset;
+				console.log(scrollpos);
+				if(scrollpos >= 34){
+				}else{
+				}
+			}
+			
+		}
+
+	}
+	
+	
 	//slider script config
 	let slider;
 	if(document.body.scrollWidth < 768){
@@ -535,7 +685,7 @@ display: none;
 
 	
 	//api 호출
-	const apiCall = async function(lati, longi) {
+	const apiCall = async function(lati, longi, temp) {
 		let code = "locationBasedList";
 		let api_uri = "http://api.visitkorea.or.kr/openapi/service/rest/KorService/"+code+"?ServiceKey=0165%2B411e%2FgQnKNGRQg%2BLDx3RvUEyydBouP2dSw1kt7oznhaPXAx6SEXBjjZSnXlWWw8rdxjb8pW%2BhIws3LOiQ%3D%3D&_type=json&MobileOS=ETC&MobileApp=AppTest";
 		api_uri = api_uri + "&listYN=Y";
@@ -570,7 +720,7 @@ display: none;
 			html += "<li>";
 			html += "<div class='today-pick-card'>";
 			html += "<div class='pick-card-container'>";
-			html += "<img src='"+item.firstimage2+"' width='200'>";
+			html += "<div class='pick-img'><img src='"+item.firstimage2+"'></div>";
 			html += "<span>"+item.title+"</span>";
 			html += "</div>";
 			html += "</div>";
@@ -582,11 +732,11 @@ display: none;
 	apiCall(37.568477, 126.981611);
 	
 	
-	if (navigator.geolocation) {
-	  navigator.geolocation.getCurrentPosition(function(position) {
-		  apiCall(position.coords.latitude, position.coords.longitude);
-	  });
-	}
+// 	if (navigator.geolocation) {
+// 	  navigator.geolocation.getCurrentPosition(function(position) {
+// 		  apiCall(position.coords.latitude, position.coords.longitude);
+// 	  });
+// 	}
 	
 	</script>
 </body>

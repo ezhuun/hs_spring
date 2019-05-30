@@ -272,7 +272,7 @@
 	<!-- member 테이블 CREATE -->
 	<insert id="createMember">
 	<![CDATA[
-		INSERT INTO member (no, uuid, email, passwd, regdt, last_login, temp_code)
+		INSERT INTO member (no, uuid, email, passwd, regdate, last_login, temp_code)
 		VALUES(
 		    (SELECT NVL(MAX(no+1), 0) FROM member)
 		    , #{uuid}

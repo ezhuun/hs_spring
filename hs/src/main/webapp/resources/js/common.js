@@ -1,3 +1,6 @@
+const CURRENTURL = location.href;
+const CURRENTPAGE = CURRENTURL.substring(CURRENTURL.lastIndexOf("/")+1, CURRENTURL.length);
+
 //연결해제알림창 닫기
 const disconnectWarningClose = function(){
 	const ele = document.querySelector(".header-warning-layout");

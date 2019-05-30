@@ -9,7 +9,7 @@ public class MemberDTO {
 	private String name;
 	private String birth;
 	private String begin_date;
-	private String regdt;
+	private String regdate;
 	private String last_login;
 	private String auth_key;
 	private String auth_status;
@@ -20,6 +20,7 @@ public class MemberDTO {
 	private String c_code;
 	private String gender;
 	private int lev;
+	
 	private MemberDTO lover;
 	private MemberConnectDTO connect;
 	
@@ -27,7 +28,7 @@ public class MemberDTO {
 	@Override
 	public String toString() {
 		return "MemberDTO [no=" + no + ", uuid=" + uuid + ", email=" + email + ", passwd=" + passwd + ", name=" + name
-				+ ", birth=" + birth + ", begin_date=" + begin_date + ", regdt=" + regdt + ", last_login=" + last_login
+				+ ", birth=" + birth + ", begin_date=" + begin_date + ", regdate=" + regdate + ", last_login=" + last_login
 				+ ", auth_key=" + auth_key + ", auth_status=" + auth_status + ", session_key=" + session_key
 				+ ", session_limit=" + session_limit + ", profile=" + profile + ", temp_code=" + temp_code + ", c_code="
 				+ c_code + ", gender=" + gender + ", lev=" + lev + ", lover=" + lover + ", connect=" + connect
@@ -99,11 +100,11 @@ public class MemberDTO {
 	public void setBegin_date(String begin_date) {
 		this.begin_date = begin_date;
 	}
-	public String getRegdt() {
-		return regdt;
+	public String getRegdate() {
+		return regdate;
 	}
-	public void setRegdt(String regdt) {
-		this.regdt = regdt;
+	public void setRegdate(String regdate) {
+		this.regdate = regdate;
 	}
 	public String getLast_login() {
 		return last_login;
