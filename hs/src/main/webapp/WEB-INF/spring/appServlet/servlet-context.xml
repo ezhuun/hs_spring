@@ -24,7 +24,7 @@
 	</beans:bean>
 	<aop:config proxy-target-class="true">
 		<aop:pointcut id="serviceOperation"
-			expression="execution(* com.spring.hs.model..*Service*.*(..))" />
+			expression="execution(* spring.model..*Service*.*(..))" />
 		<aop:advisor id="transactionAdvisor"
 			pointcut-ref="serviceOperation" advice-ref="txAdvice" />
 	</aop:config>
@@ -53,6 +53,8 @@
 	<resources mapping="/upload/**" location="/resources/upload/" />
 	<resources mapping="/libs/**" location="/resources/libs/" />
 	<resources mapping="/favicon/**" location="/resources/favicon/" />
+	<resources mapping="/ckeditor/**" location="/resources/ckeditor/" />
+	<resources mapping="/ckfinder/**" location="/resources/ckfinder/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->
@@ -99,7 +101,7 @@
 			<mvc:exclude-mapping path="/reRegisterPasswd" />
 
 			<beans:bean id="authenticationInterceptor"
-				class="com.spring.hs.AuthenticationInterceptor"></beans:bean>
+				class="spring.utility.hs.AuthenticationInterceptor"></beans:bean>
 		</mvc:interceptor>
 
 		<!-- login페이지로 접근시 세션값이 유지 되었다면 index페이지로 이동 -->
@@ -110,13 +112,13 @@
 			<mvc:mapping path="/connect" />
 			<mvc:mapping path="/profile" />
 			<beans:bean id="autoLoginInterceptor"
-				class="com.spring.hs.AutoLoginInterceptor"></beans:bean>
+				class="spring.utility.hs.AutoLoginInterceptor"></beans:bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 
 	<context:component-scan
-		base-package="com.spring.hs.model.*" />
+		base-package="spring.model.*" />
 	<context:component-scan
-		base-package="com.spring.hs.controller" />
+		base-package="spring.controller.hs" />
 
 </beans:beans>

@@ -4,7 +4,7 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
 <tiles-definitions>
-	<definition name="main" template="/WEB-INF/views/template/template_auth.jsp">
+	<definition name="main" template="/WEB-INF/views/_template/template_auth.jsp">
 <!-- 		<put-attribute name="header" value="/WEB-INF/views/template/top.jsp" /> -->
 	</definition>
 	

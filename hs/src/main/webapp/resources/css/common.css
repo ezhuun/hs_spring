@@ -377,3 +377,19 @@ body {
     margin-left: 0;
     background-color: #ccc;
 }
+
+.sideBorder{
+	border-left: 1px solid #efefef;
+	border-right: 1px solid #efefef;
+	padding: 0 1rem;
+	margin: 1rem 0;
+	background: #fff;
+}
+
+.boxsing{
+	border: 1px solid #efefef;
+    box-shadow: 1px 1px 25px 1px rgba(0,0,0,0.3);
+    background: #fff;
+    border-radius: 3px;
+    padding: 1rem;
+}
