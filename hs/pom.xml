@@ -198,11 +198,11 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.fasterxml.jackson.dataformat</groupId> -->
-<!-- 			<artifactId>jackson-dataformat-xml</artifactId> -->
-<!-- 			<version>2.9.6</version> -->
-<!-- 		</dependency> -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.9.6</version>
+		</dependency>
 
 		<!--스프링시큐리티 web 라이브러리 -->
 		<dependency>

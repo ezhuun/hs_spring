@@ -5,14 +5,12 @@
 <div class="container-inner">
 
 	<div class="dday-box">
-	
 		<div class="dday-container">
 			<div class="dday-round">
 				<span>우리 벌써</span>
 				<span class="days">100</span>
 				<span>일째 사랑중♡</span>
 			</div>
-			
 			<div class="both-photo">
 				<div class="onesProfile">
 					<div class="circle-photo">
@@ -43,8 +41,6 @@
 				</div>
 			</div>
 		</div>
-		
-		
 	</div>
 
 
@@ -85,7 +81,6 @@
 	<span class="h2">친구에게도 하기 힘든말</span>
 	<span class="headerLine">+</span>
 	<div class="board-list-box">
-
 		<div class="tb-container">
 			<div class="tb-top">
 				<span class="tb-title">오늘의 고민</span>
@@ -141,25 +136,27 @@
 				</table>
 			</div>
 		</div>
-		
 		<div class="tb-container">
 			<img src="${root}/images/banner/banner_date_trouble.png" />
 		</div>
-
 	</div>
+	
+	
+	
 	
 	<br/>
 	<span class="h2">오늘 여기 어때요?</span>
 	<span class="headerLine">+</span>
 	<div class="today-pick-box">
 		<ul class="today-pick-slider">
-<!-- 						<li> -->
-<!-- 							<div class="today-pick-card"> -->
-<!-- 								<div class="pick-card-container">1</div> -->
-<!-- 							</div> -->
-<!-- 						</li> -->
+<!-- 			<li> -->
+<!-- 				<div class="today-pick-card"> -->
+<!-- 					<div class="pick-card-container">1</div> -->
+<!-- 				</div> -->
+<!-- 			</li> -->
 		</ul>
 	</div>
+	
 </div>
 
 	
@@ -178,17 +175,6 @@
 	<script src="${pageContext.request.contextPath}/js/utils.js" charset="utf-8"></script>
 	<script src="${pageContext.request.contextPath}/js/common.js" charset="utf-8"></script>
 	<script>
-
-	function debounce(fn, delay){
-		var timer = null;
-		return function(){
-			clearTimeout(timer);
-			timer = setTimeout(function(){
-				fn.apply();
-			}, delay);
-		};
-	}
-	
 	//scroll header
 	document.addEventListener('scroll', debounce(headerScrolling, 10));
 	function headerScrolling(){
@@ -204,11 +190,8 @@
 				}else{
 				}
 			}
-			
 		}
-
 	}
-	
 	
 	//slider script config
 	let slider;
@@ -236,7 +219,6 @@
 		});
 	}
 
-	
 	let media = window.matchMedia("screen and (max-width: 768px)");
 	media.addListener(function(e) {
 		if(e.matches){

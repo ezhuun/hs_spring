@@ -145,6 +145,9 @@ const handleClickLogin = function () {
 			submitStr.classList.remove("hidden");
 		},
 		success: function (data) {
+			if(data){
+				data = xmlToJson(data).Map;
+			}
 			if (data.result == "0") {
 				//회원정보없음
 				createHelp(0, " - 회원정보가 존재하지 않습니다");
@@ -257,6 +260,9 @@ const handleClickRegister = function () {
 			submitStr.classList.remove("hidden");
 		},
 		success: function (data) {
+			if(data){
+				data = xmlToJson(data).Map;
+			}
 			if (data.result == "0") {
 				createHelp(0, " - 중복된 이메일입니다");
 			} else if (data.result == "2") {
@@ -357,6 +363,9 @@ const handleClickConnect = function () {
 			submitStr.classList.remove("hidden");
 		},
 		success: function (data) {
+			if(data){
+				data = xmlToJson(data).Map;
+			}
 			if (data.result == "0") {
 				//code is null
 				createHelp(1, " - 유효한 코드가 아닙니다");
@@ -573,4 +582,66 @@ const handleChangePasswd = function () {
 			}
 		}
 	});
+}
+
+
+//==============================================
+//delete memeber
+//----------------------------------------------
+const onDeleteMember = function(uuid){
+	utils.popupFormInitHelp();
+	const passwd = document.querySelector("#d_passwd").value;
+	if(passwd == ""){
+		utils.popupFormCreateHelp(0, '- 비밀번호를 입력해주세요');
+		return;
+	}
+    $.ajax({
+        url: contextPath + "/deleteMember",
+        method: "post",
+        type: "json",
+        data: {uuid: uuid, passwd: passwd},
+        success: function(data) {
+			if(data){
+				data = xmlToJson(data).Map;
+			}
+        	if(data.result == "0"){
+        		utils.popupFormCreateHelp(0, '- 비밀번호가 일치하지 않습니다');
+        	}else if(data.result == "1"){
+        		utils.alert('정상적으로 회원탈퇴 되었습니다', contextPath+'/logout');
+        	}else if(data.result == "2"){
+        		utils.alert('문제가 발생했습니다. 로그아웃됩니다.', contextPath+'/logout');
+        	}
+        }
+    });
+}
+
+const handleDeleteMember = function(uuid){
+	utils.popupForm('비밀번호 확인', 
+			'<div>비밀번호<input type=\"password\" id=\"d_passwd\" name=\"d_passwd\"></div>', 
+			'<button onclick=\"onDeleteMember(\''+uuid+'\')\">확인</button>');
+}
+
+//==============================================
+//disconnect
+//----------------------------------------------
+const onDisconnect = function(uuid){
+	let form = document.createElement("form");
+	form.setAttribute("style", "display:none");
+    form.setAttribute("charset", "UTF-8");
+    form.setAttribute("method", "post");
+    form.setAttribute("action", contextPath+"/disconnect");
+    
+    let hiddenField = document.createElement("input");
+    hiddenField.setAttribute("type", "hidden");
+    hiddenField.setAttribute("name", "uuid");
+    hiddenField.setAttribute("value", uuid);
+    form.appendChild(hiddenField);
+    
+    document.body.appendChild(form);
+    form.submit();
+}
+const handleDisconnect = function(uuid){
+	utils.alert('상대방과의 연결을 끊으시면 본 사이트에서 제공하는 서비스를 더 이상 이용하실 수 없습니다. <span style=\"color:#f7394f;\">그래도 연결해제를 원하시면 아래 회원탈퇴 버튼을 눌러주세요.</span> <span class=\"textSmall\"><br/>(이 메시지를 무시하려면 확인버튼을 눌러주세요)</span>',
+			'',
+			'<button onclick=\"onDisconnect(\''+uuid+'\');\" style=\"background-color:#f7394f;\">연결끊기</button>');
 }
